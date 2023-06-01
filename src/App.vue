@@ -5,6 +5,9 @@
     <div v-if="groupCompData">
       {{ groupCompData }}
     </div>
+    <div v-if="apiError">
+      {{ apiError }}
+    </div>
   </div>
 </template>
 
@@ -18,22 +21,13 @@ export default {
   mounted() {
     //check all resolved1
     let playersLoaded = this.loadPlayerChars().then(
-      (res) =>
-        (this.$store.state.playerChars = JSON.parse(
-          JSON.parse(res.data.d).message
-        ))
+      (res) =>(this.$store.state.playerChars = JSON.parse(JSON.parse(res.data.d).message))
     );
     let affixesLoaded = this.loadAffixList().then(
-      (res) =>
-        (this.$store.state.affixList = JSON.parse(
-          JSON.parse(res.data.d).message
-        ))
+      (res) =>(this.$store.state.affixList = JSON.parse(JSON.parse(res.data.d).message))
     );
     let dungeonsLoaded = this.loadDungeonList().then(
-      (res) =>
-        (this.$store.state.dungeonList = JSON.parse(
-          JSON.parse(res.data.d).message
-        ))
+      (res) =>(this.$store.state.dungeonList = JSON.parse(JSON.parse(res.data.d).message))
     );
 
     //Only begin once all data is loaded
@@ -59,6 +53,7 @@ export default {
 
       //returned Group Info from API
       groupCompData: null,
+      apiError:null,
     };
   },
 
@@ -66,29 +61,24 @@ export default {
   methods: {
     //API call to the player Characters Google Doc
     async loadPlayerChars() {
-      return await axios.post(this.$store.state.webServiceURL + "playerChars", {
-        contentType: "application/json",
-      });
+      return await axios.post(this.$store.state.webServiceURL + "playerChars", {contentType: "application/json",});
     },
 
     //API call to the dungeon list
     async loadDungeonList() {
-      return await axios.post(this.$store.state.webServiceURL + "dungeonList", {
-        contentType: "application/json",
-      });
+      return await axios.post(this.$store.state.webServiceURL + "dungeonList", {contentType: "application/json",});
     },
 
     //API call to the Affix list
     async loadAffixList() {
-      return await axios.post(this.$store.state.webServiceURL + "affixList", {
-        contentType: "application/json",
-      });
+      return await axios.post(this.$store.state.webServiceURL + "affixList", {contentType: "application/json",});
     },
 
     //Submit the group to the API
     async getGroup() {
       await axios
         .post(this.$store.state.webServiceURL + "computedGroup", {
+          //apply the parameters
           contentType: "application/json",
           dungeonName: this.selectedDungeon,
           keystoneLevel: this.selectedKeyStoneLevel,
@@ -102,11 +92,15 @@ export default {
           player_5_name: this.selectedPlayerName5,
         })
         .then((res) => {
+          //setup the return response
           let response = JSON.parse(res.data.d);
           let response_status = response.status;
           let response_data = response.message;
           //check the status
+          //success
           if(response_status == "success"){this.groupCompData = JSON.parse(response.message)}
+          //error
+          if(response_status == "fail"){this.apiError = response.message}
         });
     },
   },
