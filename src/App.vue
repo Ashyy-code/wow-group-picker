@@ -56,6 +56,7 @@ export default {
       specsLoaded,
     ]).then((res) => {
       this.$store.state.appLoaded = true;
+      console.log(this.$store.state.playerChars, this.$store.state.dungeonList, this.$store.state.affixList, this.$store.state.specList)
     });
   },
 
