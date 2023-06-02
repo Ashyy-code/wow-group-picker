@@ -19,7 +19,7 @@ import axios from "axios";
 export default {
   //on initializaion of main app..
   mounted() {
-    //check all resolved1
+    //check all resolved
     let playersLoaded = this.loadPlayerChars().then(
       (res) =>(this.$store.state.playerChars = JSON.parse(JSON.parse(res.data.d).message))
     );
@@ -29,10 +29,15 @@ export default {
     let dungeonsLoaded = this.loadDungeonList().then(
       (res) =>(this.$store.state.dungeonList = JSON.parse(JSON.parse(res.data.d).message))
     );
+    let specsLoaded = this.loadSpecs().then(
+      (res) =>(this.$store.state.specList = JSON.parse(JSON.parse(res.data.d).message))
+    );
 
     //Only begin once all data is loaded
-    Promise.all([playersLoaded, affixesLoaded, dungeonsLoaded]).then((res) => {
+    Promise.all([playersLoaded, affixesLoaded, dungeonsLoaded, specsLoaded]).then((res) => {
       this.$store.state.appLoaded = true;
+      //testing output
+      console.log(this.$store.state.dungeonList,this.$store.state.affixList,this.$store.state.playerChars,this.$store.state.specList)
     });
   },
 
@@ -72,6 +77,11 @@ export default {
     //API call to the Affix list
     async loadAffixList() {
       return await axios.post(this.$store.state.webServiceURL + "affixList", {contentType: "application/json",});
+    },
+
+    //API call to the Spec List
+    async loadSpecs(){
+      return await axios.post(this.$store.state.webServiceURL + "specStats", {contentType: "application/json",});
     },
 
     //Submit the group to the API

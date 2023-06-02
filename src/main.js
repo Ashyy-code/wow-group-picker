@@ -15,6 +15,7 @@ const store = createStore({
       playerChars:[],
       dungeonList:[],
       affixList:[],
+      specList:[],
 
       //UX
       appLoaded:false,
