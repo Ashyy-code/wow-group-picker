@@ -1,43 +1,61 @@
 <template>
   <div v-if="!this.$store.state.appLoaded">Loading data..</div>
   <div v-if="this.$store.state.appLoaded">
-    <button @click="getGroup()">Test the API</button>
-    <div v-if="groupCompData">
-      {{ groupCompData }}
-    </div>
-    <div v-if="apiError">
-      {{ apiError }}
-    </div>
+    <dungeonPicker
+      :dungeonData="this.$store.state.dungeonList"
+      @dungeonSelected="selectDungeon"
+    />
   </div>
+  <div v-if="apiError">{{ apiError }}</div>
 </template>
 
 <script>
 //get axios ref
 import axios from "axios";
+//component refs
+import dungeonPicker from "./components/dungeonPicker.vue";
 
 //main app stuff here
 export default {
+  //component dependencies
+  components: { dungeonPicker },
+
   //on initializaion of main app..
   mounted() {
     //check all resolved
     let playersLoaded = this.loadPlayerChars().then(
-      (res) =>(this.$store.state.playerChars = JSON.parse(JSON.parse(res.data.d).message))
+      (res) =>
+        (this.$store.state.playerChars = JSON.parse(
+          JSON.parse(res.data.d).message
+        ))
     );
     let affixesLoaded = this.loadAffixList().then(
-      (res) =>(this.$store.state.affixList = JSON.parse(JSON.parse(res.data.d).message))
+      (res) =>
+        (this.$store.state.affixList = JSON.parse(
+          JSON.parse(res.data.d).message
+        ))
     );
     let dungeonsLoaded = this.loadDungeonList().then(
-      (res) =>(this.$store.state.dungeonList = JSON.parse(JSON.parse(res.data.d).message))
+      (res) =>
+        (this.$store.state.dungeonList = JSON.parse(
+          JSON.parse(res.data.d).message
+        ))
     );
     let specsLoaded = this.loadSpecs().then(
-      (res) =>(this.$store.state.specList = JSON.parse(JSON.parse(res.data.d).message))
+      (res) =>
+        (this.$store.state.specList = JSON.parse(
+          JSON.parse(res.data.d).message
+        ))
     );
 
     //Only begin once all data is loaded
-    Promise.all([playersLoaded, affixesLoaded, dungeonsLoaded, specsLoaded]).then((res) => {
+    Promise.all([
+      playersLoaded,
+      affixesLoaded,
+      dungeonsLoaded,
+      specsLoaded,
+    ]).then((res) => {
       this.$store.state.appLoaded = true;
-      //testing output
-      console.log(this.$store.state.dungeonList,this.$store.state.affixList,this.$store.state.playerChars,this.$store.state.specList)
     });
   },
 
@@ -58,7 +76,7 @@ export default {
 
       //returned Group Info from API
       groupCompData: null,
-      apiError:null,
+      apiError: null,
     };
   },
 
@@ -66,22 +84,30 @@ export default {
   methods: {
     //API call to the player Characters Google Doc
     async loadPlayerChars() {
-      return await axios.post(this.$store.state.webServiceURL + "playerChars", {contentType: "application/json",});
+      return await axios.post(this.$store.state.webServiceURL + "playerChars", {
+        contentType: "application/json",
+      });
     },
 
     //API call to the dungeon list
     async loadDungeonList() {
-      return await axios.post(this.$store.state.webServiceURL + "dungeonList", {contentType: "application/json",});
+      return await axios.post(this.$store.state.webServiceURL + "dungeonList", {
+        contentType: "application/json",
+      });
     },
 
     //API call to the Affix list
     async loadAffixList() {
-      return await axios.post(this.$store.state.webServiceURL + "affixList", {contentType: "application/json",});
+      return await axios.post(this.$store.state.webServiceURL + "affixList", {
+        contentType: "application/json",
+      });
     },
 
     //API call to the Spec List
-    async loadSpecs(){
-      return await axios.post(this.$store.state.webServiceURL + "specStats", {contentType: "application/json",});
+    async loadSpecs() {
+      return await axios.post(this.$store.state.webServiceURL + "specStats", {
+        contentType: "application/json",
+      });
     },
 
     //Submit the group to the API
@@ -108,14 +134,42 @@ export default {
           let response_data = response.message;
           //check the status
           //success
-          if(response_status == "success"){this.groupCompData = JSON.parse(response.message)}
+          if (response_status == "success") {
+            this.groupCompData = JSON.parse(response.message);
+          }
           //error
-          if(response_status == "fail"){this.apiError = response.message}
+          if (response_status == "fail") {
+            this.apiError = response.message;
+          }
         });
+    },
+
+    //Component eMit methods
+    //DungeonSelector Component fires dungeon Selected Event
+    selectDungeon(dungeon) {
+      //set the selected Dungeon
+      this.selectedDungeon = dungeon;
+      //testing
+      console.log(this.selectedDungeon.dungeon_name);
     },
   },
 };
 </script>
 
 <style lang="scss">
+/*root vars*/
+:root {
+  --a-dark-1: #121212;
+  --a-dark-2: #3d3d3d;
+  --a-dark-2-alternate: #494949;
+  --a-dark-3: #1b1b1b;
+
+  --a-accent-1: #ecdb6f;
+  --a-accent-2: #837a3e;
+}
+body {
+  background: var(--a-dark-1);
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
 </style>
