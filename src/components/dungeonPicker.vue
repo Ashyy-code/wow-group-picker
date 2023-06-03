@@ -121,7 +121,7 @@ export default {
 
   i {
     position: absolute;
-    top: .5rem;
+    top: .25rem;
     right: .5rem;
     color: var(--a-dark-1);
     font-size: 200%;

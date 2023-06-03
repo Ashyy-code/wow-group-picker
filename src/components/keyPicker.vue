@@ -65,7 +65,7 @@ export default {
 
   i {
     position: absolute;
-    top: 0.5rem;
+    top: 0.25rem;
     right: .5rem;
     color: var(--a-dark-1);
     font-size: 200%;

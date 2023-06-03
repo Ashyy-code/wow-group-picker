@@ -14,6 +14,54 @@
     <keyPicker
       @keySelected="selectKeyLevel"
     />
+
+    <genericPicker 
+    :dataSet="this.$store.state.affixList" 
+    :itemBind="'affix_name'" 
+    :preSelectedItem="'Raging'"
+    :imageBind="'affix_icon'" />
+
+    <genericPicker 
+    :dataSet="this.$store.state.affixList" 
+    :itemBind="'affix_name'" 
+    :preSelectedItem="'Afflicted'"
+    :imageBind="'affix_icon'" />
+
+    <genericPicker 
+    :dataSet="this.$store.state.affixList" 
+    :itemBind="'affix_name'" 
+    :preSelectedItem="'Fortified'"
+    :imageBind="'affix_icon'" />
+
+    <genericPicker 
+    :dataSet="this.$store.state.playerChars" 
+    :itemBind="'charName'" 
+    :preSelectedItem="'Ashypog'"
+    :imageBind="'player_img'" />
+
+    <genericPicker 
+    :dataSet="this.$store.state.playerChars" 
+    :itemBind="'charName'" 
+    :preSelectedItem="'Ashypog'"
+    :imageBind="'player_img'" />
+
+    <genericPicker 
+    :dataSet="this.$store.state.playerChars" 
+    :itemBind="'charName'" 
+    :preSelectedItem="'Ashypog'"
+    :imageBind="'player_img'" />
+
+    <genericPicker 
+    :dataSet="this.$store.state.playerChars" 
+    :itemBind="'charName'" 
+    :preSelectedItem="'Ashypog'"
+    :imageBind="'player_img'" />
+
+    <genericPicker 
+    :dataSet="this.$store.state.playerChars" 
+    :itemBind="'charName'" 
+    :preSelectedItem="'Ashypog'"
+    :imageBind="'player_img'" />
   
   </div>
 
@@ -29,6 +77,8 @@ import axios from "axios";
 //component refs
 import dungeonPicker from "./components/dungeonPicker.vue";
 import keyPicker from "./components/keyPicker.vue";
+import genericPicker from "./components/genericPicker.vue";
+
 
 //main app stuff here
 export default {
@@ -36,6 +86,7 @@ export default {
   components: { 
     dungeonPicker,
     keyPicker,
+    genericPicker
    },
 
   //on initializaion of main app..
@@ -182,6 +233,27 @@ export default {
 </script>
 
 <style lang="scss">
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--a-accent-1) #333333;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #333333;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--a-accent-1);
+    border-radius: 10px;
+    border: 0px none #333333;
+  }
 /*root vars*/
 :root {
   --a-dark-1: #121212;
@@ -201,7 +273,7 @@ body {
 }
 .testing{
   display:flex;
-  flex-direction: row;
+  flex-direction: column;
   gap:1rem;
   margin:5rem;
 }
