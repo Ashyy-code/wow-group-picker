@@ -1,26 +1,33 @@
 <template>
   <div class="dungeon-picker-wrapper">
-    <i class='bx bx-chevron-down'></i>
+    <i class="bx bx-chevron-down"></i>
     <input
       type="text"
-      @focus="showPopup = true; $event.target.select()"
+      @focus="
+        showPopup = true;
+        $event.target.select();
+      "
       :showAsFocused="itemFocused"
       @blur="checkBlur()"
       placeholder="Start Typing.."
       v-model="selectedDungeon"
       aria-label="Select Dungeon"
+      @keyup="handleKeyInput($event)"
     />
     <transition name="fade">
       <div v-if="showPopup" class="picker-options-wrap">
         <div class="picker-options">
           <div
-            v-for="(dungeon, index) in dungeonData"
+            v-for="(dungeon, index) in filteredDungeonList"
             :key="index"
             class="option"
             tabindex="0"
             @mousedown="selectDungeon(dungeon)"
             @focus="itemFocused = true"
-            @blur="itemFocused = false;checkBlur();"
+            @blur="
+              itemFocused = false;
+              checkBlur();
+            "
             @keydown="handleKey($event, dungeon)"
             :aria-label="dungeon.dungeon_name"
           >
@@ -41,7 +48,10 @@ export default {
   emits: ["dungeonSelected"],
 
   //initialization
-  mounted() {},
+  mounted() {
+    //set the initial list to all dungeons
+    this.filteredDungeonList = this.dungeonData;
+  },
 
   //local component variables
   data() {
@@ -63,7 +73,7 @@ export default {
       this.selectedDungeon = dungeon.dungeon_name;
       this.showPopup = false;
       this.itemFocused = false;
-      this.$emit("dungeonSelected",dungeon);
+      this.$emit("dungeonSelected", dungeon);
     },
     //accessibility stuff
     checkBlur() {
@@ -74,10 +84,30 @@ export default {
       }, 300);
     },
     //more accessibility stuff
-    handleKey(e,dungeon) {
+    handleKey(e, dungeon) {
       if (e.code == "Enter" || e.code == "NumpadEnter") {
-       this.selectDungeon(dungeon);
+        this.selectDungeon(dungeon);
       }
+    },
+    //checking filtering the list
+    handleKeyInput(e) {
+      //abort if accessibility keys are pressed
+      if(e.code == "Tab" || e.code == "Enter" || e.code == "NumpadEnter"){
+        return;
+      }
+      //accessibility stuff
+      if(e.code == "ArrowDown"){
+        document.querySelector('.option').focus();
+        return;
+      }
+      //clear the initial
+      this.filteredDungeonList = [];
+      //push the matches
+      this.dungeonData.forEach(dungeon =>{
+        if (dungeon.dungeon_name.toLowerCase().includes(this.selectedDungeon.toLowerCase())){
+          this.filteredDungeonList.push(dungeon);
+        }
+      })  
     },
   },
 };
@@ -87,14 +117,14 @@ export default {
 .dungeon-picker-wrapper {
   max-width: 500px;
   padding: 2rem;
-  position:relative;
+  position: relative;
 
-  i{
-    position:absolute;
-    top:2.25rem;
-    right:2.25rem;
-    color:var(--a-dark-1);
-    font-size:200%;
+  i {
+    position: absolute;
+    top: 2.25rem;
+    right: 2.25rem;
+    color: var(--a-dark-1);
+    font-size: 200%;
   }
 
   input {
