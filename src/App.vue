@@ -172,5 +172,6 @@ body {
   background: var(--a-dark-1);
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color:white;
 }
 </style>
