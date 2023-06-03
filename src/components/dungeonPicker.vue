@@ -116,15 +116,15 @@ export default {
 <style lang="scss" scoped>
 .dungeon-picker-wrapper {
   max-width: 500px;
-  padding: 2rem;
   position: relative;
 
   i {
     position: absolute;
-    top: 2.25rem;
-    right: 2.25rem;
+    top: .5rem;
+    right: .5rem;
     color: var(--a-dark-1);
     font-size: 200%;
+    pointer-events: none;
   }
 
   input {
@@ -132,11 +132,16 @@ export default {
     background: var(--a-dark-2);
     border: 0;
     border-radius: 0.5rem;
-    width: calc(100% - 1.5rem);
+    width: calc(100% - 3.75rem);
     cursor: pointer;
     outline: none;
     font-size: 100%;
     color: white;
+    padding-right:3rem;
+
+    &:hover{
+      outline: solid 3px var(--a-accent-3);
+    }
 
     &[showAsFocused="true"] {
       outline: solid 3px var(--a-accent-1);
@@ -190,16 +195,5 @@ export default {
     }
   }
 }
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-.fade-enter-to,
-.fade-leave-from {
-  opacity: 1;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 200ms ease;
-}
+
 </style>

@@ -1,10 +1,24 @@
 <template>
   <div v-if="!this.$store.state.appLoaded">Loading data..</div>
   <div v-if="this.$store.state.appLoaded">
+    
+
+    <div class="testing">
+
+    
     <dungeonPicker
       :dungeonData="this.$store.state.dungeonList"
       @dungeonSelected="selectDungeon"
     />
+
+    <keyPicker
+      @keySelected="selectKeyLevel"
+    />
+  
+  </div>
+
+
+
   </div>
   <div v-if="apiError">{{ apiError }}</div>
 </template>
@@ -14,11 +28,15 @@
 import axios from "axios";
 //component refs
 import dungeonPicker from "./components/dungeonPicker.vue";
+import keyPicker from "./components/keyPicker.vue";
 
 //main app stuff here
 export default {
   //component dependencies
-  components: { dungeonPicker },
+  components: { 
+    dungeonPicker,
+    keyPicker,
+   },
 
   //on initializaion of main app..
   mounted() {
@@ -153,6 +171,12 @@ export default {
       //testing
       console.log(this.selectedDungeon.dungeon_name);
     },
+    selectKeyLevel(keyLevel){
+      //set the selected key
+      this.selectedKeyStoneLevel = keyLevel;
+      //testing
+      console.log(this.selectedKeyStoneLevel);
+    }
   },
 };
 </script>
@@ -167,11 +191,31 @@ export default {
 
   --a-accent-1: #ecdb6f;
   --a-accent-2: #837a3e;
+  --a-accent-3: #686868;
 }
 body {
   background: var(--a-dark-1);
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color:white;
+}
+.testing{
+  display:flex;
+  flex-direction: row;
+  gap:1rem;
+  margin:5rem;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 200ms ease;
 }
 </style>
