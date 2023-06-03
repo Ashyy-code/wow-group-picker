@@ -31,6 +31,7 @@
             @keydown="handleKey($event, dungeon)"
             :aria-label="dungeon.dungeon_name"
           >
+            <img :src="'https://ashypls.com/wowzers/img/' + dungeon.era + '.png'">
             {{ dungeon.dungeon_name }}
           </div>
         </div>
@@ -167,10 +168,18 @@ export default {
 
       .option {
         color: white;
-        padding: 0.5rem;
+        padding: 0.75rem;
         user-select: none;
         cursor: pointer;
         outline: 0;
+        display:flex;
+        align-items: center;
+        gap:1rem;
+
+        img{
+          height:20px;
+          width:20px;
+        }
 
         &:focus {
           background: var(--a-accent-1);

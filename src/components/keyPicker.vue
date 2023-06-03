@@ -83,6 +83,7 @@ export default {
     font-size: 100%;
     color: white;
     padding-right:3rem;
+    white-space: nowrap;
 
     &:hover {
       outline: solid 3px var(--a-accent-3);
@@ -114,9 +115,10 @@ export default {
     user-select: none;
 
     &[selected] {
-      padding: 0 1rem;
+      padding: .25rem 1rem;
       background: var(--a-accent-1);
       color: black;
+      white-space: nowrap;
       &:hover {
         outline: none;
       }
