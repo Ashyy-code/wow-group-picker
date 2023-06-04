@@ -116,6 +116,10 @@ export default {
     flex-wrap: wrap;
     justify-content: stretch;
     gap: 1rem;
+
+    position:absolute;
+    width:100%;
+    z-index: 9999;
   }
   .option {
     padding: 0.25rem 1rem;

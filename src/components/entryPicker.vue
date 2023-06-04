@@ -198,6 +198,9 @@ export default {
     margin-top: 0.75rem;
     padding: 0.5rem;
     outline: solid 3px var(--a-accent-1);
+    position:absolute;
+    z-index: 9999;
+    width:calc(100% - 1rem);
 
     .picker-options {
       max-height: 200px;

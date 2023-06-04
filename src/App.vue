@@ -3,6 +3,8 @@
   <div v-if="this.$store.state.appLoaded">
     <div class="testing">
 
+      {{ this.$store.state.playerList }}
+
       <div class="key-wrapper">
 
       <entryPicker
@@ -50,10 +52,10 @@
       </div>
 
       <entryPicker
-        :dataSet="this.$store.state.playerChars"
-        itemBind="charName"
-        itemName="Dungeon"
-        imageBind="spec_img"
+        :dataSet="this.$store.state.playerList"
+        itemBind="name"
+        itemName="Player"
+        imageBind="img"
         pickerTitle="Who is the keystone owner?"
         @itemSelected="selectPlayer"
         controlWidth="500px"
@@ -83,10 +85,19 @@ export default {
   mounted() {
     //check all resolved
     let playersLoaded = this.loadPlayerChars().then(
-      (res) =>
-        (this.$store.state.playerChars = JSON.parse(
-          JSON.parse(res.data.d).message
-        ))
+      (res) =>{
+        this.$store.state.playerChars = JSON.parse(JSON.parse(res.data.d).message);
+        //build players dataSet from the chars dataSet
+        //blank it
+        this.$store.state.playerList = [];
+        //add the players
+        this.$store.state.playerChars.forEach(char => {
+          let player = {name:char.player,img:char.class_img}
+          if(this.$store.state.playerList.filter(item => item.name == player.name).length < 1){
+            this.$store.state.playerList.push(player);
+          }
+        })
+      }     
     );
     let affixesLoaded = this.loadAffixList().then(
       (res) =>
