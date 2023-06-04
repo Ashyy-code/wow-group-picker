@@ -334,8 +334,7 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: white;
   font-size:1rem;
-  height:100vh;
-  width:100vw;
+
 }
 .section {
   background:var(--a-section);
