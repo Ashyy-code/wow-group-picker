@@ -1,9 +1,9 @@
 <template>
   <div class="component-wrap">
   <div class="title">
-    Select Keystone Level
+    Keystone Level
   </div>
-  <div class="key-picker-wrapper">
+  <div class="key-picker-wrapper" :style="'width:' + controlWidth">
     <i class="bx bx-chevron-down"></i>
     <div
       class="key-picker"
@@ -39,6 +39,9 @@ export default {
   //events
   emits: ["keySelected"],
 
+  //props
+  props: ["controlWidth"],
+
   //local component data
   data() {
     return {
@@ -71,7 +74,6 @@ export default {
 }
 .key-picker-wrapper {
   position: relative;
-  max-width: 500px;
 
   i {
     position: absolute;
@@ -94,9 +96,10 @@ export default {
     color: white;
     padding-right:3rem;
     white-space: nowrap;
+    outline: solid 3px var(--a-accent-3);
 
     &:hover {
-      outline: solid 3px var(--a-accent-3);
+      outline: solid 3px var(--a-accent-2);
     }
 
     &:focus {

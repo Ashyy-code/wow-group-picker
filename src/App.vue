@@ -1,65 +1,104 @@
 <template>
   <div v-if="!this.$store.state.appLoaded">Loading data..</div>
   <div v-if="this.$store.state.appLoaded">
-    <div class="testing">
-
-      {{ this.$store.state.playerList }}
-
-      <div class="key-wrapper">
-
-      <entryPicker
-        :dataSet="this.$store.state.dungeonList"
-        itemBind="dungeon_name"
-        itemName="Dungeon"
-        imageBind="era_img"
-        pickerTitle="Select Dungeon.."
-        @itemSelected="selectDungeon"
-        controlWidth="500px"
-      />
-
-      <keyPicker
-        @keySelected="selectKeyLevel"
-      />
-
-    </div>
-
-      <div class="affix-wrapper">
-
+    <h1>Ashy's Group Picker</h1>
+    <div class="app-wrap">
+      <div class="section">
+        <h2><i class='bx bxs-key'></i>Keystone</h2>
+        <div class="section-wrapper">
         <entryPicker
-        :dataSet="this.$store.state.affixList"
-        itemBind="affix_name"
-        itemName="Affix"
-        imageBind="affix_icon"
-        pickerTitle="Select Affix 1"
-        @itemSelected="selectAffix"
-      />
-      <entryPicker
-        :dataSet="this.$store.state.affixList"
-        itemBind="affix_name"
-        itemName="Affix"
-        imageBind="affix_icon"
-        pickerTitle="Select Affix 2"
-        @itemSelected="selectAffix"
-      />
-      <entryPicker
-        :dataSet="this.$store.state.affixList"
-        itemBind="affix_name"
-        itemName="Affix"
-        imageBind="affix_icon"
-        pickerTitle="Select Affix 3"
-        @itemSelected="selectAffix"
-      />
+          :dataSet="this.$store.state.dungeonList"
+          itemBind="dungeon_name"
+          itemName="Dungeon"
+          imageBind="era_img"
+          pickerTitle="Dungeon"
+          @itemSelected="selectDungeon"
+          controlWidth="500px"
+        />
+
+        <keyPicker @keySelected="selectKeyLevel" controlWidth="240px" />
+      </div></div>
+
+      <div class="section">
+        <h2><i class='bx bxs-ghost' ></i>Affixes</h2>
+        <div class="section-wrapper">
+          <entryPicker
+            :dataSet="this.$store.state.affixList"
+            itemBind="affix_name"
+            itemName="Affix"
+            imageBind="affix_icon"
+            pickerTitle="Affix 1"
+            @itemSelected="selectAffix"
+          />
+          <entryPicker
+            :dataSet="this.$store.state.affixList"
+            itemBind="affix_name"
+            itemName="Affix"
+            imageBind="affix_icon"
+            pickerTitle="Affix 2"
+            @itemSelected="selectAffix"
+          />
+          <entryPicker
+            :dataSet="this.$store.state.affixList"
+            itemBind="affix_name"
+            itemName="Affix"
+            imageBind="affix_icon"
+            pickerTitle="Affix 3"
+            @itemSelected="selectAffix"
+          />
+        </div>
       </div>
 
-      <entryPicker
-        :dataSet="this.$store.state.playerList"
-        itemBind="name"
-        itemName="Player"
-        imageBind="img"
-        pickerTitle="Who is the keystone owner?"
-        @itemSelected="selectPlayer"
-        controlWidth="500px"
-      />
+      <div class="section">
+        <h2><i class='bx bxs-joystick' ></i>Players</h2>
+        <div class="section-wrapper">
+          <entryPicker
+            :dataSet="this.$store.state.playerList"
+            itemBind="name"
+            itemName="Player"
+            imageBind="img"
+            pickerTitle="Player 1"
+            @itemSelected="selectPlayer"
+            controlWidth="200px"
+          />
+          <entryPicker
+            :dataSet="this.$store.state.playerList"
+            itemBind="name"
+            itemName="Player"
+            imageBind="img"
+            pickerTitle="Player 2"
+            @itemSelected="selectPlayer"
+            controlWidth="200px"
+          />
+          <entryPicker
+            :dataSet="this.$store.state.playerList"
+            itemBind="name"
+            itemName="Player"
+            imageBind="img"
+            pickerTitle="Player 3"
+            @itemSelected="selectPlayer"
+            controlWidth="200px"
+          />
+          <entryPicker
+            :dataSet="this.$store.state.playerList"
+            itemBind="name"
+            itemName="Player"
+            imageBind="img"
+            pickerTitle="PLayer 4"
+            @itemSelected="selectPlayer"
+            controlWidth="200px"
+          />
+          <entryPicker
+            :dataSet="this.$store.state.playerList"
+            itemBind="name"
+            itemName="Player"
+            imageBind="img"
+            pickerTitle="PLayer 5"
+            @itemSelected="selectPlayer"
+            controlWidth="200px"
+          />
+        </div>
+      </div>
     </div>
   </div>
 
@@ -84,21 +123,25 @@ export default {
   //on initializaion of main app..
   mounted() {
     //check all resolved
-    let playersLoaded = this.loadPlayerChars().then(
-      (res) =>{
-        this.$store.state.playerChars = JSON.parse(JSON.parse(res.data.d).message);
-        //build players dataSet from the chars dataSet
-        //blank it
-        this.$store.state.playerList = [];
-        //add the players
-        this.$store.state.playerChars.forEach(char => {
-          let player = {name:char.player,img:char.class_img}
-          if(this.$store.state.playerList.filter(item => item.name == player.name).length < 1){
-            this.$store.state.playerList.push(player);
-          }
-        })
-      }     
-    );
+    let playersLoaded = this.loadPlayerChars().then((res) => {
+      this.$store.state.playerChars = JSON.parse(
+        JSON.parse(res.data.d).message
+      );
+      //build players dataSet from the chars dataSet
+      //blank it
+      this.$store.state.playerList = [];
+      //add the players
+      this.$store.state.playerChars.forEach((char) => {
+        let player = { name: char.player, img: char.class_img };
+        if (
+          this.$store.state.playerList.filter(
+            (item) => item.name == player.name
+          ).length < 1
+        ) {
+          this.$store.state.playerList.push(player);
+        }
+      });
+    });
     let affixesLoaded = this.loadAffixList().then(
       (res) =>
         (this.$store.state.affixList = JSON.parse(
@@ -193,7 +236,7 @@ export default {
           affix_1_id: this.selectedAffix1,
           affix_2_id: this.selectedAffix2,
           affix_3_id: this.selectedAffix3,
-          keystone_owner : this.selectedKeyOwner
+          keystone_owner: this.selectedKeyOwner,
         })
         .then((res) => {
           //setup the return response
@@ -241,7 +284,6 @@ export default {
       //testing
       console.log(this.selectedAffix1);
     },
-
   },
 };
 </script>
@@ -270,10 +312,11 @@ export default {
 }
 /*root vars*/
 :root {
-  --a-dark-1: #121212;
+  --a-dark-1: #0c0c0c;
   --a-dark-2: #3d3d3d;
   --a-dark-2-alternate: #494949;
   --a-dark-3: #1b1b1b;
+  --a-section:#161616;
 
   --a-accent-1: #ecdb6f;
   --a-accent-2: #837a3e;
@@ -285,23 +328,45 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: white;
 }
-.testing {
-  display: flex;
+.section {
+  background:var(--a-section);
+  padding:1rem;
+  border-radius: 1rem;
+
+  h2{
+    padding:0;
+    margin:1rem;
+    margin-left:0;
+    color:var(--a-accent-1);
+    display:flex;
+    align-items: center;
+
+    i{
+      margin-right:.5rem;
+    }
+  }
+
+  .section-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+}
+h1{
+  padding:0;
+  margin:0;
+  text-align: center;
+  margin-top:2rem;
+}
+.app-wrap{
+  width:100%;
+  max-width: 980px;
+  margin:auto;
+  margin-top:1rem;
+  display:flex;
   flex-direction: column;
-  gap: 1rem;
-  margin: 5rem;
-
-  .affix-wrapper{
-    display:flex;
-    flex-direction: row;
-    gap:3rem;
-  }
-
-  .key-wrapper{
-    display:flex;
-    flex-direction: row;
-    gap:3rem;
-  }
+  gap:1rem;
 }
 
 .fade-enter-from,

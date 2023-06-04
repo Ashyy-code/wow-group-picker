@@ -3,7 +3,7 @@
   <div class="title">
     {{ pickerTitle }}
   </div>
-  <div class="picker-wrapper" :style="'width:' + controlWidth">
+  <div class="picker-wrapper" :style="'width:' + controlWidth + 'max-width:100%;'">
     <i class="bx bx-chevron-down"></i>
     <img v-if="selectedItem" :src="selectedItem[imageBind]" />
     <input
@@ -172,6 +172,7 @@ export default {
     color: white;
     padding-right: 3rem;
     text-transform: capitalize;
+    outline: solid 3px var(--a-accent-3);
 
 
     &[itsl="true"] {
@@ -180,7 +181,7 @@ export default {
     }
 
     &:hover {
-      outline: solid 3px var(--a-accent-3);
+      outline: solid 3px var(--a-accent-2);
     }
 
     &[showAsFocused="true"] {
