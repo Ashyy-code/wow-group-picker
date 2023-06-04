@@ -328,12 +328,14 @@ export default {
   --a-accent-4: #ecdb6f;
 }
 body {
-  background: url('group-bg.jpg');
+  background: url('https://ashypls.com/wowzers/img/group-bg.jpg');
   background-size: cover;
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: white;
   font-size:1rem;
+  height:100vh;
+  width:100vw;
 }
 .section {
   background:var(--a-section);
