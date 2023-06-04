@@ -320,15 +320,16 @@ export default {
   --a-dark-2: #3d3d3d;
   --a-dark-2-alternate: #494949;
   --a-dark-3: #1b1b1b;
-  --a-section:#161616;
+  --a-section:#161616d9;
 
   --a-accent-1: #ecdb6f;
   --a-accent-2: #837a3e;
   --a-accent-3: #686868;
-  --a-accent-4: #1e1e1e;
+  --a-accent-4: #ecdb6f;
 }
 body {
-  background: var(--a-dark-1);
+  background: url('group-bg.jpg');
+  background-size: cover;
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: white;
@@ -344,6 +345,7 @@ body {
     padding:0;
     margin:1rem;
     margin-left:0;
+    margin-top:0;
     color:var(--a-accent-1);
     display:flex;
     align-items: center;
@@ -395,7 +397,7 @@ h1{
   position:absolute;
   top:0;
   left:0;
-  background:black;
+  background:var(--a-section);
   display:grid;
   place-items: center;
   font-size: 200%;
