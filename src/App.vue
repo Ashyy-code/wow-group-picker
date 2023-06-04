@@ -1,5 +1,9 @@
 <template>
-  <div v-if="!this.$store.state.appLoaded">Loading data..</div>
+  <div class="loader" v-if="!this.$store.state.appLoaded">
+  
+  <span><i class='bx bx-loader bx-spin' ></i><br />Trying to fetch Group/Dungeon/Affix Data..</span>
+
+  </div>
   <div v-if="this.$store.state.appLoaded">
     <h1>Ashy's Group Picker</h1>
     <div class="app-wrap">
@@ -84,7 +88,7 @@
             itemBind="name"
             itemName="Player"
             imageBind="img"
-            pickerTitle="PLayer 4"
+            pickerTitle="Player 4"
             @itemSelected="selectPlayer"
             controlWidth="200px"
           />
@@ -93,7 +97,7 @@
             itemBind="name"
             itemName="Player"
             imageBind="img"
-            pickerTitle="PLayer 5"
+            pickerTitle="Player 5"
             @itemSelected="selectPlayer"
             controlWidth="200px"
           />
@@ -321,17 +325,20 @@ export default {
   --a-accent-1: #ecdb6f;
   --a-accent-2: #837a3e;
   --a-accent-3: #686868;
+  --a-accent-4: #1e1e1e;
 }
 body {
   background: var(--a-dark-1);
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: white;
+  font-size:1rem;
 }
 .section {
   background:var(--a-section);
   padding:1rem;
   border-radius: 1rem;
+  outline:solid 3px var(--a-accent-4);
 
   h2{
     padding:0;
@@ -366,7 +373,7 @@ h1{
   margin-top:1rem;
   display:flex;
   flex-direction: column;
-  gap:1rem;
+  gap:2rem;
 }
 
 .fade-enter-from,
@@ -380,5 +387,27 @@ h1{
 .fade-enter-active,
 .fade-leave-active {
   transition: all 200ms ease;
+}
+
+.loader{
+  width:100vw;
+  height:100vh;
+  position:absolute;
+  top:0;
+  left:0;
+  background:black;
+  display:grid;
+  place-items: center;
+  font-size: 200%;
+
+  span{
+    max-width: 400px;
+    text-align: center;
+  }
+
+  i{
+    font-size:200%;
+    margin-right:1rem;
+  }
 }
 </style>
