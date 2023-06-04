@@ -1,73 +1,66 @@
 <template>
   <div v-if="!this.$store.state.appLoaded">Loading data..</div>
   <div v-if="this.$store.state.appLoaded">
-    
-
     <div class="testing">
 
-    
-    <dungeonPicker
-      :dungeonData="this.$store.state.dungeonList"
-      @dungeonSelected="selectDungeon"
-    />
+      <div class="key-wrapper">
 
-    <keyPicker
-      @keySelected="selectKeyLevel"
-    />
+      <entryPicker
+        :dataSet="this.$store.state.dungeonList"
+        itemBind="dungeon_name"
+        itemName="Dungeon"
+        imageBind="era_img"
+        pickerTitle="Select Dungeon.."
+        @itemSelected="selectDungeon"
+        controlWidth="500px"
+      />
 
-    <genericPicker 
-    :dataSet="this.$store.state.affixList" 
-    :itemBind="'affix_name'" 
-    :preSelectedItem="'Raging'"
-    :imageBind="'affix_icon'" />
+      <keyPicker
+        @keySelected="selectKeyLevel"
+      />
 
-    <genericPicker 
-    :dataSet="this.$store.state.affixList" 
-    :itemBind="'affix_name'" 
-    :preSelectedItem="'Afflicted'"
-    :imageBind="'affix_icon'" />
+    </div>
 
-    <genericPicker 
-    :dataSet="this.$store.state.affixList" 
-    :itemBind="'affix_name'" 
-    :preSelectedItem="'Fortified'"
-    :imageBind="'affix_icon'" />
+      <div class="affix-wrapper">
 
-    <genericPicker 
-    :dataSet="this.$store.state.playerChars" 
-    :itemBind="'charName'" 
-    :preSelectedItem="'Ashypog'"
-    :imageBind="'player_img'" />
+        <entryPicker
+        :dataSet="this.$store.state.affixList"
+        itemBind="affix_name"
+        itemName="Affix"
+        imageBind="affix_icon"
+        pickerTitle="Select Affix 1"
+        @itemSelected="selectAffix"
+      />
+      <entryPicker
+        :dataSet="this.$store.state.affixList"
+        itemBind="affix_name"
+        itemName="Affix"
+        imageBind="affix_icon"
+        pickerTitle="Select Affix 2"
+        @itemSelected="selectAffix"
+      />
+      <entryPicker
+        :dataSet="this.$store.state.affixList"
+        itemBind="affix_name"
+        itemName="Affix"
+        imageBind="affix_icon"
+        pickerTitle="Select Affix 3"
+        @itemSelected="selectAffix"
+      />
+      </div>
 
-    <genericPicker 
-    :dataSet="this.$store.state.playerChars" 
-    :itemBind="'charName'" 
-    :preSelectedItem="'Ashypog'"
-    :imageBind="'player_img'" />
-
-    <genericPicker 
-    :dataSet="this.$store.state.playerChars" 
-    :itemBind="'charName'" 
-    :preSelectedItem="'Ashypog'"
-    :imageBind="'player_img'" />
-
-    <genericPicker 
-    :dataSet="this.$store.state.playerChars" 
-    :itemBind="'charName'" 
-    :preSelectedItem="'Ashypog'"
-    :imageBind="'player_img'" />
-
-    <genericPicker 
-    :dataSet="this.$store.state.playerChars" 
-    :itemBind="'charName'" 
-    :preSelectedItem="'Ashypog'"
-    :imageBind="'player_img'" />
-  
+      <entryPicker
+        :dataSet="this.$store.state.playerChars"
+        itemBind="charName"
+        itemName="Dungeon"
+        imageBind="spec_img"
+        pickerTitle="Who is the keystone owner?"
+        @itemSelected="selectPlayer"
+        controlWidth="500px"
+      />
+    </div>
   </div>
 
-
-
-  </div>
   <div v-if="apiError">{{ apiError }}</div>
 </template>
 
@@ -75,19 +68,16 @@
 //get axios ref
 import axios from "axios";
 //component refs
-import dungeonPicker from "./components/dungeonPicker.vue";
 import keyPicker from "./components/keyPicker.vue";
-import genericPicker from "./components/genericPicker.vue";
-
+import entryPicker from "./components/entryPicker.vue";
 
 //main app stuff here
 export default {
   //component dependencies
-  components: { 
-    dungeonPicker,
+  components: {
     keyPicker,
-    genericPicker
-   },
+    entryPicker,
+  },
 
   //on initializaion of main app..
   mounted() {
@@ -125,7 +115,12 @@ export default {
       specsLoaded,
     ]).then((res) => {
       this.$store.state.appLoaded = true;
-      console.log(this.$store.state.playerChars, this.$store.state.dungeonList, this.$store.state.affixList, this.$store.state.specList)
+      // console.log(
+      //   this.$store.state.playerChars,
+      //   this.$store.state.dungeonList,
+      //   this.$store.state.affixList,
+      //   this.$store.state.specList
+      // );
     });
   },
 
@@ -135,14 +130,10 @@ export default {
       //selected client items
       selectedDungeon: null,
       selectedKeyStoneLevel: 0,
-      selectedAffix1_id: 0,
-      selectedAffix2_id: 0,
-      selectedAffix3_id: 0,
-      selectedPlayerName1: null,
-      selectedPlayerName2: null,
-      selectedPlayerName3: null,
-      selectedPlayerName4: null,
-      selectedPlayerName5: null,
+      selectedAffix1: 0,
+      selectedAffix2: 0,
+      selectedAffix3: 0,
+      selectedKeyOwner: null,
 
       //returned Group Info from API
       groupCompData: null,
@@ -188,14 +179,10 @@ export default {
           contentType: "application/json",
           dungeonName: this.selectedDungeon,
           keystoneLevel: this.selectedKeyStoneLevel,
-          affix_1_id: this.selectedAffix1_id,
-          affix_2_id: this.selectedAffix2_id,
-          affix_3_id: this.selectedAffix3_id,
-          player_1_name: this.selectedPlayerName1,
-          player_2_name: this.selectedPlayerName2,
-          player_3_name: this.selectedPlayerName3,
-          player_4_name: this.selectedPlayerName4,
-          player_5_name: this.selectedPlayerName5,
+          affix_1_id: this.selectedAffix1,
+          affix_2_id: this.selectedAffix2,
+          affix_3_id: this.selectedAffix3,
+          keystone_owner : this.selectedKeyOwner
         })
         .then((res) => {
           //setup the return response
@@ -220,40 +207,56 @@ export default {
       //set the selected Dungeon
       this.selectedDungeon = dungeon;
       //testing
-      console.log(this.selectedDungeon.dungeon_name);
+      console.log(this.selectedDungeon);
     },
-    selectKeyLevel(keyLevel){
+    //Keystone Selector Component fires the keystone selected event
+    selectKeyLevel(keyLevel) {
       //set the selected key
       this.selectedKeyStoneLevel = keyLevel;
       //testing
       console.log(this.selectedKeyStoneLevel);
-    }
+    },
+    //Player selector component fires the selctedPlayer event
+    selectPlayer(charname) {
+      //set the selected key
+      this.selectedKeyOwner = charname;
+      //testing
+      console.log(this.selectedKeyOwner);
+    },
+    //Affix selector component fires the selected Affix event
+    selectAffix(affix) {
+      //set the selected key
+      this.selectedAffix1 = affix;
+      //testing
+      console.log(this.selectedAffix1);
+    },
+
   },
 };
 </script>
 
 <style lang="scss">
 /* ===== Scrollbar CSS ===== */
-  /* Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--a-accent-1) #333333;
-  }
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--a-accent-1) #333333;
+}
 
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-    width: 16px;
-  }
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 16px;
+}
 
-  *::-webkit-scrollbar-track {
-    background: #333333;
-  }
+*::-webkit-scrollbar-track {
+  background: #333333;
+}
 
-  *::-webkit-scrollbar-thumb {
-    background-color: var(--a-accent-1);
-    border-radius: 10px;
-    border: 0px none #333333;
-  }
+*::-webkit-scrollbar-thumb {
+  background-color: var(--a-accent-1);
+  border-radius: 10px;
+  border: 0px none #333333;
+}
 /*root vars*/
 :root {
   --a-dark-1: #121212;
@@ -269,13 +272,25 @@ body {
   background: var(--a-dark-1);
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color:white;
+  color: white;
 }
-.testing{
-  display:flex;
+.testing {
+  display: flex;
   flex-direction: column;
-  gap:1rem;
-  margin:5rem;
+  gap: 1rem;
+  margin: 5rem;
+
+  .affix-wrapper{
+    display:flex;
+    flex-direction: row;
+    gap:3rem;
+  }
+
+  .key-wrapper{
+    display:flex;
+    flex-direction: row;
+    gap:3rem;
+  }
 }
 
 .fade-enter-from,

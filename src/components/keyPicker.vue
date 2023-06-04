@@ -1,4 +1,8 @@
 <template>
+  <div class="component-wrap">
+  <div class="title">
+    Select Keystone Level
+  </div>
   <div class="key-picker-wrapper">
     <i class="bx bx-chevron-down"></i>
     <div
@@ -7,7 +11,7 @@
       @blur="showPicker = false"
       tabindex="1"
     >
-      <span v-if="!selectedKey">Select Key Level</span>
+      <span ph v-if="!selectedKey">-- Select --</span>
       <span selected class="option" v-if="selectedKey">{{ selectedKey }}</span>
     </div>
     <transition name="fade">
@@ -27,6 +31,7 @@
       </div>
     </transition>
   </div>
+</div>
 </template>
 
 <script>
@@ -37,7 +42,7 @@ export default {
   //local component data
   data() {
     return {
-      selectedKeyLevel: "Select Key Level",
+      selectedKeyLevel:'',
       keyRange: [
         "<10",
         "+10-15",
@@ -59,6 +64,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.component-wrap{
+  display:flex;
+  flex-direction: column;
+  gap:1rem;
+}
 .key-picker-wrapper {
   position: relative;
   max-width: 500px;
@@ -128,5 +138,8 @@ export default {
       outline: solid 3px var(--a-accent-1);
     }
   }
+}
+span[ph]{
+  color:#717171;
 }
 </style>

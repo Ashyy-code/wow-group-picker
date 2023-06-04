@@ -1,80 +1,93 @@
 <template>
-  <div class="dungeon-picker-wrapper">
+  <div class="component-wrap">
+  <div class="title">
+    {{ pickerTitle }}
+  </div>
+  <div class="picker-wrapper" :style="'width:' + controlWidth">
     <i class="bx bx-chevron-down"></i>
+    <img v-if="selectedItem" :src="selectedItem[imageBind]" />
     <input
       type="text"
       @focus="
         showPopup = true;
         $event.target.select();
       "
+      :itsl="selectedItem != null"
       :showAsFocused="itemFocused"
       @blur="checkBlur()"
       placeholder="Start Typing.."
-      v-model="selectedDungeon"
-      aria-label="Select Dungeon"
+      v-model="selectedValue"
+      :aria-label="'Select ' + itemName"
       @keyup="handleKeyInput($event)"
     />
     <transition name="fade">
       <div v-if="showPopup" class="picker-options-wrap">
         <div class="picker-options">
           <div
-            v-for="(dungeon, index) in filteredDungeonList"
+            v-for="(item, index) in filteredItemList"
             :key="index"
             class="option"
             tabindex="0"
-            @mousedown="selectDungeon(dungeon)"
+            @mousedown="selectItem(item)"
             @focus="itemFocused = true"
             @blur="
               itemFocused = false;
               checkBlur();
             "
-            @keydown="handleKey($event, dungeon)"
-            :aria-label="dungeon.dungeon_name"
+            @keydown="handleKey($event, item)"
+            :aria-label="item[itemBind]"
           >
-            <img :src="'https://ashypls.com/wowzers/img/' + dungeon.era + '.png'">
-            {{ dungeon.dungeon_name }}
+            <img :src="item[imageBind]" />
+            {{ item[itemBind] }}
           </div>
         </div>
       </div>
     </transition>
   </div>
+</div>
 </template>
 
 <script>
 export default {
   //props expeced for this component
-  props: ["dungeonData"],
+  props: ["dataSet", "itemName", "itemBind", "imageBind","pickerTitle","controlWidth"],
 
   //events
-  emits: ["dungeonSelected"],
+  emits: ["itemSelected"],
 
   //initialization
   mounted() {
     //set the initial list to all dungeons
-    this.filteredDungeonList = this.dungeonData;
+    this.filteredItemList = this.dataSet;
   },
 
   //local component variables
   data() {
     return {
       //filtered list
-      filteredDungeonList: [],
+      filteredItemList: [],
+
+      //data
+      selectedItem: null,
+      selectedValue: "",
+      selectedImage: "",
 
       //UX
       showPopup: false,
-      selectedDungeon: null,
       itemFocused: false,
     };
   },
 
   //events and methods and stuff lol
   methods: {
-    //set the selected dungeon
-    selectDungeon(dungeon) {
-      this.selectedDungeon = dungeon.dungeon_name;
+    //set the selected item
+    selectItem(item) {
+      this.selectedItem = item;
+      this.selectedValue = item[this.itemBind];
+      this.selectedImage = item[this.imageBind];
       this.showPopup = false;
       this.itemFocused = false;
-      this.$emit("dungeonSelected", dungeon);
+      this.$emit("itemSelected", item);
     },
     //accessibility stuff
     checkBlur() {
@@ -85,44 +98,63 @@ export default {
       }, 300);
     },
     //more accessibility stuff
-    handleKey(e, dungeon) {
+    handleKey(e, item) {
       if (e.code == "Enter" || e.code == "NumpadEnter") {
-        this.selectDungeon(dungeon);
+        this.selectItem(item);
       }
     },
     //checking filtering the list
     handleKeyInput(e) {
       //abort if accessibility keys are pressed
-      if(e.code == "Tab" || e.code == "Enter" || e.code == "NumpadEnter"){
+      if (e.code == "Tab" || e.code == "Enter" || e.code == "NumpadEnter") {
         return;
       }
       //accessibility stuff
-      if(e.code == "ArrowDown"){
-        document.querySelector('.option').focus();
+      if (e.code == "ArrowDown") {
+        document.querySelector(".option").focus();
         return;
       }
       //clear the initial
-      this.filteredDungeonList = [];
+      this.filteredItemList = [];
       //push the matches
-      this.dungeonData.forEach(dungeon =>{
-        if (dungeon.dungeon_name.toLowerCase().includes(this.selectedDungeon.toLowerCase())){
-          this.filteredDungeonList.push(dungeon);
+      this.dataSet.forEach((item) => {
+        if (
+          item[this.itemBind]
+            .toLowerCase()
+            .includes(this.selectedValue.toLowerCase())
+        ) {
+          this.filteredItemList.push(item);
         }
-      })  
+      });
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.dungeon-picker-wrapper {
-  max-width: 500px;
+.component-wrap{
+  display:flex;
+  flex-direction: column;
+  gap:1rem;
+}
+.picker-wrapper {
   position: relative;
+  text-transform: capitalize;
+
+
+  img {
+    height: 25px;
+    width: 25px;
+    position:absolute;
+    top:.5rem;
+    left:.6rem;
+    border-radius: 50%;
+  }
 
   i {
     position: absolute;
-    top: .25rem;
-    right: .5rem;
+    top: 0.25rem;
+    right: 0.5rem;
     color: var(--a-dark-1);
     font-size: 200%;
     pointer-events: none;
@@ -138,9 +170,16 @@ export default {
     outline: none;
     font-size: 100%;
     color: white;
-    padding-right:3rem;
+    padding-right: 3rem;
+    text-transform: capitalize;
 
-    &:hover{
+
+    &[itsl="true"] {
+      padding-left: 3rem;
+      width: calc(100% - 6rem);
+    }
+
+    &:hover {
       outline: solid 3px var(--a-accent-3);
     }
 
@@ -172,13 +211,15 @@ export default {
         user-select: none;
         cursor: pointer;
         outline: 0;
-        display:flex;
+        display: flex;
         align-items: center;
-        gap:1rem;
+        gap: 1rem;
 
-        img{
-          height:20px;
-          width:20px;
+        img {
+          height: 25px;
+          width: 25px;
+          position: static;
+          border-radius: 50%;
         }
 
         &:focus {
@@ -204,5 +245,4 @@ export default {
     }
   }
 }
-
 </style>
