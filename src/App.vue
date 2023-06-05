@@ -1,32 +1,30 @@
 <template>
   <div class="loader" v-if="!this.$store.state.appLoaded">
-    <span
-      ><i class="bx bx-loader bx-spin"></i><br />Trying to fetch
-      Group/Dungeon/Affix Data..</span
-    >
+  
+  <span><i class='bx bx-loader bx-spin' ></i><br />Trying to fetch Group/Dungeon/Affix Data..</span>
+
   </div>
   <div v-if="this.$store.state.appLoaded">
     <h1>Ashy's Group Picker</h1>
     <div class="app-wrap">
       <div class="section">
-        <h2><i class="bx bxs-key"></i>Keystone</h2>
+        <h2><i class='bx bxs-key'></i>Keystone</h2>
         <div class="section-wrapper">
-          <entryPicker
-            :dataSet="this.$store.state.dungeonList"
-            itemBind="dungeon_name"
-            itemName="Dungeon"
-            imageBind="era_img"
-            pickerTitle="Dungeon"
-            @itemSelected="selectDungeon"
-            controlWidth="500px"
-          />
+        <entryPicker
+          :dataSet="this.$store.state.dungeonList"
+          itemBind="dungeon_name"
+          itemName="Dungeon"
+          imageBind="era_img"
+          pickerTitle="Dungeon"
+          @itemSelected="selectDungeon"
+          controlWidth="500px"
+        />
 
-          <keyPicker @keySelected="selectKeyLevel" controlWidth="240px" />
-        </div>
-      </div>
+        <keyPicker @keySelected="selectKeyLevel" controlWidth="240px" />
+      </div></div>
 
       <div class="section">
-        <h2><i class="bx bxs-ghost"></i>Affixes</h2>
+        <h2><i class='bx bxs-ghost' ></i>Affixes</h2>
         <div class="section-wrapper">
           <entryPicker
             :dataSet="this.$store.state.affixList"
@@ -56,10 +54,9 @@
       </div>
 
       <div class="section">
-        <h2><i class="bx bxs-joystick"></i>Players</h2>
+        <h2><i class='bx bxs-joystick' ></i>Players</h2>
         <div class="section-wrapper">
           <entryPicker
-            ref="rf_ep_player_1"
             :dataSet="this.$store.state.playerList"
             itemBind="name"
             itemName="Player"
@@ -69,7 +66,6 @@
             controlWidth="200px"
           />
           <entryPicker
-            ref="rf_ep_player_2"
             :dataSet="this.$store.state.playerList"
             itemBind="name"
             itemName="Player"
@@ -79,7 +75,6 @@
             controlWidth="200px"
           />
           <entryPicker
-            ref="rf_ep_player_3"
             :dataSet="this.$store.state.playerList"
             itemBind="name"
             itemName="Player"
@@ -89,7 +84,6 @@
             controlWidth="200px"
           />
           <entryPicker
-            ref="rf_ep_player_4"
             :dataSet="this.$store.state.playerList"
             itemBind="name"
             itemName="Player"
@@ -99,7 +93,6 @@
             controlWidth="200px"
           />
           <entryPicker
-            ref="rf_ep_player_5"
             :dataSet="this.$store.state.playerList"
             itemBind="name"
             itemName="Player"
@@ -287,8 +280,6 @@ export default {
       this.selectedKeyOwner = charname;
       //testing
       console.log(this.selectedKeyOwner);
-      //clear others
-      this.clearDupes(charname);
     },
     //Affix selector component fires the selected Affix event
     selectAffix(affix) {
@@ -297,14 +288,6 @@ export default {
       //testing
       console.log(this.selectedAffix1);
     },
-    //clear duplicates from other controls
-    clearDupes(item){
-      this.$refs.rf_ep_player_1.removeItem(item);
-      this.$refs.rf_ep_player_2.removeItem(item);
-      this.$refs.rf_ep_player_3.removeItem(item);
-      this.$refs.rf_ep_player_4.removeItem(item);
-      this.$refs.rf_ep_player_5.removeItem(item);
-    }
   },
 };
 </script>
@@ -337,7 +320,7 @@ export default {
   --a-dark-2: #3d3d3d;
   --a-dark-2-alternate: #494949;
   --a-dark-3: #1b1b1b;
-  --a-section: #161616d9;
+  --a-section:#161616d9;
 
   --a-accent-1: #ecdb6f;
   --a-accent-2: #837a3e;
@@ -345,30 +328,31 @@ export default {
   --a-accent-4: #ecdb6f;
 }
 body {
-  background: url("https://ashypls.com/wowzers/img/group-bg.jpg");
+  background: url('https://ashypls.com/wowzers/img/group-bg.jpg');
   background-size: cover;
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: white;
-  font-size: 1rem;
+  font-size:1rem;
+
 }
 .section {
-  background: var(--a-section);
-  padding: 1rem;
+  background:var(--a-section);
+  padding:1rem;
   border-radius: 1rem;
-  outline: solid 3px var(--a-accent-4);
+  outline:solid 3px var(--a-accent-4);
 
-  h2 {
-    padding: 0;
-    margin: 1rem;
-    margin-left: 0;
-    margin-top: 0;
-    color: var(--a-accent-1);
-    display: flex;
+  h2{
+    padding:0;
+    margin:1rem;
+    margin-left:0;
+    margin-top:0;
+    color:var(--a-accent-1);
+    display:flex;
     align-items: center;
 
-    i {
-      margin-right: 0.5rem;
+    i{
+      margin-right:.5rem;
     }
   }
 
@@ -379,20 +363,20 @@ body {
     flex-wrap: wrap;
   }
 }
-h1 {
-  padding: 0;
-  margin: 0;
+h1{
+  padding:0;
+  margin:0;
   text-align: center;
-  margin-top: 2rem;
+  margin-top:2rem;
 }
-.app-wrap {
-  width: 100%;
+.app-wrap{
+  width:100%;
   max-width: 980px;
-  margin: auto;
-  margin-top: 1rem;
-  display: flex;
+  margin:auto;
+  margin-top:1rem;
+  display:flex;
   flex-direction: column;
-  gap: 2rem;
+  gap:2rem;
 }
 
 .fade-enter-from,
@@ -408,25 +392,25 @@ h1 {
   transition: all 200ms ease;
 }
 
-.loader {
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: var(--a-section);
-  display: grid;
+.loader{
+  width:100vw;
+  height:100vh;
+  position:absolute;
+  top:0;
+  left:0;
+  background:var(--a-section);
+  display:grid;
   place-items: center;
   font-size: 200%;
 
-  span {
+  span{
     max-width: 400px;
     text-align: center;
   }
 
-  i {
-    font-size: 200%;
-    margin-right: 1rem;
+  i{
+    font-size:200%;
+    margin-right:1rem;
   }
 }
 </style>
