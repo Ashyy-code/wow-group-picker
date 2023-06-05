@@ -3,7 +3,7 @@
   <div class="title">
     {{ pickerTitle }}
   </div>
-  <div class="picker-wrapper" :style="'width:' + controlWidth + 'max-width:100%;'">
+  <div class="picker-wrapper" :style="'width:' + controlWidth">
     <i class="bx bx-chevron-down"></i>
     <img v-if="selectedItem" :src="selectedItem[imageBind]" />
     <input
@@ -89,6 +89,14 @@ export default {
       this.itemFocused = false;
       this.$emit("itemSelected", item);
     },
+    //remove item from list
+    removeItem(item){
+      //check if item exists
+      if (this.filteredItemList.includes(item)){
+        this.filteredItemList = this.filteredItemList.filter(arrItem => arrItem !== item)
+      }
+    },
+
     //accessibility stuff
     checkBlur() {
       setTimeout(() => {
@@ -204,7 +212,7 @@ export default {
     width:calc(100% - 1rem);
 
     .picker-options {
-      max-height: 200px;
+      max-height: 400px;
       overflow-y: auto;
       background: var(--a-dark-2);
       width: 100%;
