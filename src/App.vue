@@ -104,6 +104,13 @@
             @itemSelected="selectPlayer"
             controlWidth="200px"
           />
+
+         
+        </div>
+      </div>
+      <div class="section" btn>
+        <div class="section-wrapper">
+          <button>Big button to click and make things go</button>
         </div>
       </div>
     </div>
@@ -361,6 +368,11 @@ body {
   border-radius: 1rem;
   outline:solid 3px var(--a-accent-4);
 
+  &[btn]{
+    background:none;
+    outline: none;
+  }
+
   h2{
     padding:0;
     margin:1rem;
@@ -380,6 +392,26 @@ body {
     flex-direction: row;
     gap: 1rem;
     flex-wrap: wrap;
+    align-items: center;
+
+    button{
+      color:black;
+      background:var(--a-accent-1);
+      border:0;
+      padding:.75rem;
+      border-radius: .5rem;
+      font-size: 100%;
+      text-transform: uppercase;
+      outline:solid 5px rgba(0, 0, 0, 0.688);
+      cursor: pointer;
+      margin:auto;
+
+      &:hover{
+        background:black;
+        color:var(--a-accent-1);
+      }
+    }
+
   }
 }
 h1{
