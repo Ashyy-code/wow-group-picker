@@ -33,6 +33,7 @@
             imageBind="affix_icon"
             pickerTitle="Affix 1"
             @itemSelected="selectAffix"
+            ref="affixpicker1"
           />
           <entryPicker
             :dataSet="this.$store.state.affixList"
@@ -41,6 +42,7 @@
             imageBind="affix_icon"
             pickerTitle="Affix 2"
             @itemSelected="selectAffix"
+            ref="affixpicker2"
           />
           <entryPicker
             :dataSet="this.$store.state.affixList"
@@ -49,6 +51,7 @@
             imageBind="affix_icon"
             pickerTitle="Affix 3"
             @itemSelected="selectAffix"
+            ref="affixpicker3"
           />
         </div>
       </div>
@@ -173,6 +176,9 @@ export default {
       specsLoaded,
     ]).then((res) => {
       this.$store.state.appLoaded = true;
+      setTimeout(()=>{
+        this.setInitialAffixes()
+      },200)
       // console.log(
       //   this.$store.state.playerChars,
       //   this.$store.state.dungeonList,
@@ -288,6 +294,19 @@ export default {
       //testing
       console.log(this.selectedAffix1);
     },
+    //set the initial affixes
+    setInitialAffixes(){
+      let currentAffixes = [];
+      this.$store.state.affixList.forEach(affix =>{
+        if (affix.is_current == 'True'){
+          currentAffixes.push(affix)
+        }
+      })
+      console.log(currentAffixes);
+      this.$refs.affixpicker1.selectItem(currentAffixes[0]);
+      this.$refs.affixpicker2.selectItem(currentAffixes[1]);
+      this.$refs.affixpicker3.selectItem(currentAffixes[2]);
+    }
   },
 };
 </script>
