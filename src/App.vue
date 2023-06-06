@@ -419,6 +419,7 @@ h1{
   margin:0;
   text-align: center;
   margin-top:2rem;
+  text-shadow: 2px 2px 2px #000000;
 }
 .app-wrap{
   width:100%;
