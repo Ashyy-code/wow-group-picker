@@ -1,10 +1,13 @@
 <template>
+  <!-- LOADER SECTION -->
   <div class="loader" v-if="!this.$store.state.appLoaded">
     <span
       ><i class="bx bx-loader bx-spin"></i><br />Trying to fetch
       Group/Dungeon/Affix Data..</span
     >
   </div>
+
+  <!-- SELECTION SCREEN -->
   <div v-if="!groupCompData" class="picking-stage">
     <div v-if="this.$store.state.appLoaded">
       <h1>Ashy's Group Picker</h1>
@@ -63,11 +66,11 @@
           <h2><i class="bx bxs-joystick"></i>Players</h2>
           <div class="section-wrapper">
             <entryPicker
-              :dataSet="this.$store.state.playerList"
-              itemBind="name"
+              :dataSet="this.$store.state.playerChars"
+              itemBind="charName"
               itemName="Player"
-              imageBind="img"
-              pickerTitle="Player 1"
+              imageBind="spec_img"
+              pickerTitle="Keystone Owner"
               @itemSelected="selectPlayer"
               controlWidth="200px"
             />
@@ -119,6 +122,43 @@
     </div>
   </div>
 
+  <!-- OUTPUT OFFERINGS -->
+  <div v-if="groupCompData" class="app-wrap">
+    <div class="output-desc">
+      <h1>Suggested Group Formation:</h1>
+      <div class="suggested-group-breakdown">
+        <div
+          v-for="player in groupCompData"
+          :key="player.player"
+          class="player"
+          :lust="player.is_lust"
+          :PI="player.is_PI"
+          :CR="player.is_CR"
+        >
+          <span v-if="player.is_lust == 1" tp lust="1"><img src='./assets/lust.jpg' /></span>
+          <span v-if="player.is_CR == 1" tp CR="1"><img src='./assets/CR.jpg' /></span>
+          <span v-if="player.is_PI == 1" tp PI="1"><img src='./assets/PI.jpg' /></span>
+          <span tp
+            v-if="player.is_lust == 0 && player.is_CR == 0 && player.is_PI == 0"
+            ><img src='./assets/none.jpg' /></span
+          >
+          <span rl>{{ player.role }}</span>
+          <img :src="player.icon" />
+          <span :style="'color:' + player.color" ch>{{ player.char }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-wrapper" rs>
+       <div v-for="player in groupCompData" :key="player.player"  class="reasons">
+        <h3>{{ player.char }}</h3>  
+        <div v-html="player.reasoning"></div>
+       </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR NOTIFICATIONS -->
   <div v-if="apiError">{{ apiError }}</div>
 </template>
 
@@ -144,9 +184,12 @@ export default {
       this.$store.state.playerChars = JSON.parse(
         JSON.parse(res.data.d).message
       );
+
       //build players dataSet from the chars dataSet
+
       //blank it
       this.$store.state.playerList = [];
+
       //add the players
       this.$store.state.playerChars.forEach((char) => {
         let player = { name: char.player, img: char.class_img };
@@ -159,18 +202,21 @@ export default {
         }
       });
     });
+    //check all loaded - affixes
     let affixesLoaded = this.loadAffixList().then(
       (res) =>
         (this.$store.state.affixList = JSON.parse(
           JSON.parse(res.data.d).message
         ))
     );
+    //check all loaded - dungeons
     let dungeonsLoaded = this.loadDungeonList().then(
       (res) =>
         (this.$store.state.dungeonList = JSON.parse(
           JSON.parse(res.data.d).message
         ))
     );
+    //check all loaded - specs
     let specsLoaded = this.loadSpecs().then(
       (res) =>
         (this.$store.state.specList = JSON.parse(
@@ -188,6 +234,9 @@ export default {
       this.$store.state.appLoaded = true;
       setTimeout(() => {
         this.setInitialAffixes();
+
+        //testing methods
+        this.getGroup().then((res) => console.log(this.groupCompData));
       }, 200);
       // console.log(
       //   this.$store.state.playerChars,
@@ -207,7 +256,11 @@ export default {
       selectedAffix1: 0,
       selectedAffix2: 0,
       selectedAffix3: 0,
-      selectedKeyOwner: null,
+      selectedPlayer1: null,
+      selectedPlayer2: null,
+      selectedPlayer3: null,
+      selectedPlayer4: null,
+      selectedPlayer5: null,
 
       //returned Group Info from API
       groupCompData: null,
@@ -256,7 +309,11 @@ export default {
           affix_1_id: this.selectedAffix1,
           affix_2_id: this.selectedAffix2,
           affix_3_id: this.selectedAffix3,
-          keystone_owner: this.selectedKeyOwner,
+          player_1_name: this.selectedPlayer1,
+          player_2_name: this.selectedPlayer2,
+          player_3_name: this.selectedPlayer3,
+          player_4_name: this.selectedPlayer4,
+          player_5_name: this.selectedPlayer5,
         })
         .then((res) => {
           //setup the return response
@@ -280,29 +337,21 @@ export default {
     selectDungeon(dungeon) {
       //set the selected Dungeon
       this.selectedDungeon = dungeon;
-      //testing
-      console.log(this.selectedDungeon);
     },
     //Keystone Selector Component fires the keystone selected event
     selectKeyLevel(keyLevel) {
       //set the selected key
       this.selectedKeyStoneLevel = keyLevel;
-      //testing
-      console.log(this.selectedKeyStoneLevel);
     },
     //Player selector component fires the selctedPlayer event
     selectPlayer(charname) {
       //set the selected key
       this.selectedKeyOwner = charname;
-      //testing
-      console.log(this.selectedKeyOwner);
     },
     //Affix selector component fires the selected Affix event
     selectAffix(affix) {
       //set the selected key
       this.selectedAffix1 = affix;
-      //testing
-      console.log(this.selectedAffix1);
     },
     //set the initial affixes
     setInitialAffixes() {
@@ -312,7 +361,7 @@ export default {
           currentAffixes.push(affix);
         }
       });
-      console.log(currentAffixes);
+      //console.log(currentAffixes);
       this.$refs.affixpicker1.selectItem(currentAffixes[0]);
       this.$refs.affixpicker2.selectItem(currentAffixes[1]);
       this.$refs.affixpicker3.selectItem(currentAffixes[2]);
@@ -355,6 +404,10 @@ export default {
   --a-accent-2: #837a3e;
   --a-accent-3: #686868;
   --a-accent-4: #ecdb6f;
+
+  --PI:white;
+  --CR:#c33b0e;
+  --lust:#16b433;
 }
 body {
   background: url("https://ashypls.com/wowzers/img/group-bg.jpg");
@@ -363,6 +416,9 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: white;
   font-size: 1rem;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 .section {
   background: var(--a-section);
@@ -395,6 +451,18 @@ body {
     gap: 1rem;
     flex-wrap: wrap;
     align-items: center;
+
+    &[rs]{
+      display:flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      max-height:500px;
+    }
+
+    .reasons{
+
+    }
 
     button {
       color: black;
@@ -468,6 +536,66 @@ h1 {
   i {
     font-size: 200%;
     margin-right: 1rem;
+  }
+}
+.output-desc {
+  display: flex;
+  flex-direction: column;
+
+  .suggested-group-breakdown {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+    gap: 2rem;
+
+    .player {
+      background: var(--a-dark-1);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 0.75rem;
+      border-radius: 0.5rem;
+      width: 100%;
+      position: relative;
+      outline:solid 5px black;
+
+
+
+      span {
+        padding: 0.25rem 1rem;
+        width: 100%;
+        text-align: center;
+
+        &[tp]{
+          padding-top:.5rem;
+
+          img{
+            height:40px;
+            width:40px;
+            outline:solid 5px black;
+            position:absolute;
+            top:-20px; left:calc(50% - 20px);
+          }
+        }
+
+        &[rl] {
+          font-size: 110%;
+          color: var(--a-accent-1);
+        }
+        &[ch] {
+          font-size: 150%;
+          padding-bottom: 1rem;
+        }
+
+      }
+
+      img {
+        border-radius: 50%;
+      }
+    }
   }
 }
 </style>
