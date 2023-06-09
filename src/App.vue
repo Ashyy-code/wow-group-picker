@@ -135,25 +135,58 @@
           :PI="player.is_PI"
           :CR="player.is_CR"
         >
-          <span v-if="player.is_lust == 1" tp lust="1"><img src='./assets/lust.jpg' /></span>
-          <span v-if="player.is_CR == 1" tp CR="1"><img src='./assets/CR.jpg' /></span>
-          <span v-if="player.is_PI == 1" tp PI="1"><img src='./assets/PI.jpg' /></span>
-          <span tp
+          <span v-if="player.is_lust == 1" tp lust="1"
+            ><img src="./assets/lust.jpg"
+          /></span>
+          <span v-if="player.is_CR == 1" tp CR="1"
+            ><img src="./assets/CR.jpg"
+          /></span>
+          <span v-if="player.is_PI == 1" tp PI="1"
+            ><img src="./assets/PI.jpg"
+          /></span>
+          <span
+            tp
             v-if="player.is_lust == 0 && player.is_CR == 0 && player.is_PI == 0"
-            ><img src='./assets/none.jpg' /></span
-          >
+            ><img src="./assets/none.jpg"
+          /></span>
           <span rl>{{ player.role }}</span>
           <img :src="player.icon" />
           <span :style="'color:' + player.color" ch>{{ player.char }}</span>
         </div>
       </div>
     </div>
-    <div class="section">
+    <h1>Reasoning:</h1>
+    <div class="section" rs>
       <div class="section-wrapper" rs>
-       <div v-for="player in groupCompData" :key="player.player"  class="reasons">
-        <h3>{{ player.char }}</h3>  
-        <div v-html="player.reasoning"></div>
-       </div>
+        <table>
+          <thead>
+            <tr>
+              <td>Player</td>
+              <td>Reasoning</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="player in groupCompData" :key="player.player">
+              <td charname>
+                <div class="reasons">
+                  <img :src="player.icon" />
+                  <span :style="'color:' + player.color">{{ player.char }}</span>
+                </div>
+              </td>
+              <td reasons>
+                <div class="reasons">
+                  <div class="reason"
+                    v-for="reason in JSON.parse(player.reasoning)"
+                    :key="reason.reason"
+                  >
+                    <span>{{ reason.reason }}</span>
+                    <img :src="'src/assets/' + reason.reason_icon" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -405,9 +438,6 @@ export default {
   --a-accent-3: #686868;
   --a-accent-4: #ecdb6f;
 
-  --PI:white;
-  --CR:#c33b0e;
-  --lust:#16b433;
 }
 body {
   background: url("https://ashypls.com/wowzers/img/group-bg.jpg");
@@ -420,11 +450,21 @@ body {
   width: 100vw;
   overflow: hidden;
 }
+#app {
+  height: 100vh;
+  overflow-y: scroll;
+}
 .section {
   background: var(--a-section);
   padding: 1rem;
   border-radius: 1rem;
   outline: solid 3px var(--a-accent-4);
+
+  &[rs]{
+    padding:0;
+    overflow: hidden;
+    outline: solid 5px var(--a-accent-4);
+  }
 
   &[btn] {
     background: none;
@@ -452,16 +492,10 @@ body {
     flex-wrap: wrap;
     align-items: center;
 
-    &[rs]{
-      display:flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      max-height:500px;
-    }
-
-    .reasons{
-
+    &[rs] {
+      display: block;
+      overflow-y: scroll;
+      max-height: 40vh;
     }
 
     button {
@@ -560,24 +594,23 @@ h1 {
       border-radius: 0.5rem;
       width: 100%;
       position: relative;
-      outline:solid 5px black;
-
-
+      outline: solid 5px black;
 
       span {
         padding: 0.25rem 1rem;
         width: 100%;
         text-align: center;
 
-        &[tp]{
-          padding-top:.5rem;
+        &[tp] {
+          padding-top: 0.5rem;
 
-          img{
-            height:40px;
-            width:40px;
-            outline:solid 5px black;
-            position:absolute;
-            top:-20px; left:calc(50% - 20px);
+          img {
+            height: 40px;
+            width: 40px;
+            outline: solid 5px black;
+            position: absolute;
+            top: -20px;
+            left: calc(50% - 20px);
           }
         }
 
@@ -589,13 +622,65 @@ h1 {
           font-size: 150%;
           padding-bottom: 1rem;
         }
-
       }
 
       img {
         border-radius: 50%;
       }
     }
+  }
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  tr:nth-child(even){
+    background:rgba(0, 0, 0, 0.253);
+  }
+
+  td {
+    padding: 0.75rem;
+    border:solid 1px black;
+
+    &[charname] {
+      font-size: 120%;
+    }
+  }
+  thead {
+    background: rgba(0, 0, 0, 0.562);
+    td{
+      border:0;
+      border-right:solid 1px black;
+    }
+  }
+}
+.reasons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+
+  .reason{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background:var(--a-dark-1);
+    border-radius: 1rem;
+    gap:.5rem;
+    padding:.5rem;
+
+    span{
+    font-size: 80%;
+  }
+  }
+
+
+
+  img {
+    border-radius: 50%;
+    height: 40px;
   }
 }
 </style>
