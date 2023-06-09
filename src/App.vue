@@ -1,7 +1,7 @@
 <template>
   <!-- LOADER SECTION -->
   <div class="loader" v-if="!this.$store.state.appLoaded">
-    <span><i class="bx bx-loader bx-spin"></i><br />Wokring on it..</span>
+    <span><i class="bx bx-loader bx-spin"></i><br />Working on it..</span>
   </div>
 
   <!-- SELECTION SCREEN -->
