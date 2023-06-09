@@ -1,10 +1,7 @@
 <template>
   <!-- LOADER SECTION -->
   <div class="loader" v-if="!this.$store.state.appLoaded">
-    <span
-      ><i class="bx bx-loader bx-spin"></i><br />Trying to fetch
-      Group/Dungeon/Affix Data..</span
-    >
+    <span><i class="bx bx-loader bx-spin"></i><br />Wokring on it..</span>
   </div>
 
   <!-- SELECTION SCREEN -->
@@ -12,6 +9,8 @@
     <div v-if="this.$store.state.appLoaded">
       <h1>Ashy's Group Picker</h1>
       <div class="app-wrap">
+
+        <!-- KEYSTONE SELECTION SECTION-->
         <div class="section">
           <h2><i class="bx bxs-key"></i>Keystone</h2>
           <div class="section-wrapper">
@@ -28,7 +27,9 @@
             <keyPicker @keySelected="selectKeyLevel" controlWidth="240px" />
           </div>
         </div>
+        <!--END KEYSTONE SELECTION SECTION-->
 
+        <!--AFFIX SELECTION SECTION-->
         <div class="section">
           <h2><i class="bx bxs-ghost"></i>Affixes</h2>
           <div class="section-wrapper">
@@ -61,7 +62,9 @@
             />
           </div>
         </div>
+        <!--END AFFIX SELECTION SECTION-->
 
+        <!--PLAYER SELECTION SECTION-->
         <div class="section">
           <h2><i class="bx bxs-joystick"></i>Players</h2>
           <div class="section-wrapper">
@@ -112,61 +115,42 @@
             />
           </div>
         </div>
+        <!--END PLAYER SELECTION SECTION-->
+
+
+        <!--GO BUTTON SECTION-->
         <div class="section" btn>
           <div class="section-wrapper" btn>
             <button>Big button to click and make things go</button>
             <img src="./assets/pandussy.png" />
           </div>
         </div>
+        <!--END GO BUTTON SECTION-->
+
+
       </div>
     </div>
   </div>
 
   <!-- OUTPUT OFFERINGS -->
-  <div v-if="groupCompData" class="app-wrap">
-    <div class="output-desc">
-      <h1>Suggested Group Formation:</h1>
-      <div class="suggested-group-breakdown">
-        <playerOutputCard v-for="player in groupCompData" :key="player.player" :player="player" />
-      </div>
-    </div>
-    <h1>Reasoning:</h1>
-    <div class="section" rs>
-      <div class="section-wrapper" rs>
-        <table>
-          <thead>
-            <tr>
-              <td>Player</td>
-              <td>Reasoning</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="player in groupCompData" :key="player.player">
-              <td charname>
-                <div class="reasons">
-                  <img :src="player.icon" />
-                  <div class="player-lst">
-                  <span ply>{{ player.player }}</span>
-                  <span :style="'color:' + player.color">{{ player.char }}</span></div>
-                </div>
-              </td>
-              <td reasons>
-                <div class="reasons">
-                  <div class="reason"
-                    v-for="reason in JSON.parse(player.reasoning)"
-                    :key="reason.reason"
-                    :isKeyOwner="reason.reason == 'Keystone Owner'"
-                  >
-                    <span>{{ reason.reason }}</span>
-                    <img :src="'src/assets/' + reason.reason_icon" />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <!--Main app wrap for the reasoning breakdown-->
+  <div class="app-wrap" v-if="groupCompData">
+    <!--Lots of test data on the outputkeystone component, ignore-->
+    <outputKeystoneVue
+      :selectedAffix1="$store.state.affixList[8]"
+      :selectedAffix2="$store.state.affixList[2]"
+      :selectedAffix3="$store.state.affixList[7]"
+      :selectedDungeon="$store.state.dungeonList[19]"
+      selectedKeyStoneLevel='+17'
+      :selectedPlayer1="$store.state.playerChars[0]"
+      :selectedPlayer2="$store.state.playerList[1]"
+      :selectedPlayer3="$store.state.playerList[5]"
+      :selectedPlayer4="null"
+      :selectedPlayer5="null"
+      
+    />
+    <outputBreakdownVue :groupCompData="groupCompData" />
+    <reasoningBreakdown :groupCompData="groupCompData" />
   </div>
 
   <!-- ERROR NOTIFICATIONS -->
@@ -179,7 +163,9 @@ import axios from "axios";
 //component refs
 import keyPicker from "./components/keyPicker.vue";
 import entryPicker from "./components/entryPicker.vue";
-import playerOutputCard from "./components/playerOutputCard.vue";
+import reasoningBreakdown from "./components/reasoningBreakdown.vue";
+import outputBreakdownVue from "./components/outputBreakdown.vue";
+import outputKeystoneVue from './components/outputKeystone.vue';
 
 //main app stuff here
 export default {
@@ -187,7 +173,9 @@ export default {
   components: {
     keyPicker,
     entryPicker,
-    playerOutputCard
+    reasoningBreakdown,
+    outputBreakdownVue,
+    outputKeystoneVue
   },
 
   //on initializaion of main app..
@@ -199,7 +187,6 @@ export default {
       );
 
       //build players dataSet from the chars dataSet
-
       //blank it
       this.$store.state.playerList = [];
 
@@ -251,12 +238,13 @@ export default {
         //testing methods
         this.getGroup().then((res) => console.log(this.groupCompData));
       }, 200);
-      // console.log(
-      //   this.$store.state.playerChars,
-      //   this.$store.state.dungeonList,
-      //   this.$store.state.affixList,
-      //   this.$store.state.specList
-      // );
+      console.log(
+        this.$store.state.playerChars,
+        this.$store.state.dungeonList,
+        this.$store.state.affixList,
+        this.$store.state.specList
+        ,this.$store.state.playerList
+      );
     });
   },
 
@@ -417,8 +405,8 @@ export default {
   --a-accent-2: #837a3e;
   --a-accent-3: #686868;
   --a-accent-4: #ecdb6f;
-
 }
+/*Body and APP main generics */
 body {
   background: url("https://ashypls.com/wowzers/img/group-bg.jpg");
   background-size: cover;
@@ -434,17 +422,19 @@ body {
   height: 100vh;
   overflow-y: scroll;
 }
+
+/*Section or container wrappers */
 .section {
   background: var(--a-section);
   padding: 1rem;
   border-radius: 1rem;
   outline: solid 3px var(--a-accent-4);
 
-  &[rs]{
-    padding:0;
+  &[rs] {
+    padding: 0;
     overflow: hidden;
     outline: solid 5px var(--a-accent-4);
-    margin-bottom:3rem;
+    margin-bottom: 3rem;
   }
 
   &[btn] {
@@ -452,6 +442,7 @@ body {
     outline: none;
   }
 
+  /*more H overrides on padding */
   h2 {
     padding: 0;
     margin: 1rem;
@@ -466,6 +457,7 @@ body {
     }
   }
 
+  /*inline sections individual and stuff */
   .section-wrapper {
     display: flex;
     flex-direction: row;
@@ -477,6 +469,7 @@ body {
       display: block;
     }
 
+    /*The big button that makes everything go */
     button {
       color: black;
       background: var(--a-accent-1);
@@ -488,18 +481,20 @@ body {
       outline: solid 5px rgba(0, 0, 0, 0.688);
       cursor: pointer;
       margin: auto;
-
+      /*hover styles for it */
       &:hover {
         background: black;
         color: var(--a-accent-1);
       }
     }
 
+    /*image size limiter */
     img {
       max-height: 50px;
     }
   }
 }
+/*Remove padding and margin on all H eles */
 h1 {
   padding: 0;
   margin: 0;
@@ -507,6 +502,7 @@ h1 {
   margin-top: 2rem;
   text-shadow: 2px 2px 2px #000000;
 }
+/*app wrap used in various components, kept here to prevent duplication of styles */
 .app-wrap {
   width: 100%;
   max-width: 980px;
@@ -517,6 +513,7 @@ h1 {
   gap: 2rem;
 }
 
+/*transitional effects added in root, used in multiple components */
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
@@ -530,6 +527,7 @@ h1 {
   transition: all 200ms ease;
 }
 
+/*the main loader - this will be tweaked later to cater for various loaders */
 .loader {
   width: 100vw;
   height: 100vh;
@@ -549,131 +547,6 @@ h1 {
   i {
     font-size: 200%;
     margin-right: 1rem;
-  }
-}
-.output-desc {
-  display: flex;
-  flex-direction: column;
-
-  .suggested-group-breakdown {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-top: 3rem;
-    gap: 2rem;
-
-    .player {
-      background: #0c0c0cbd;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 0.75rem;
-      border-radius: 0.5rem;
-      width: 100%;
-      position: relative;
-      outline: solid 5px black;
-
-      span {
-        padding: 0.25rem 1rem;
-        width: 100%;
-        text-align: center;
-
-        &[tp] {
-          padding-top: 0.5rem;
-
-          img {
-            height: 40px;
-            width: 40px;
-            outline: solid 5px black;
-            position: absolute;
-            top: -20px;
-            left: calc(50% - 20px);
-          }
-        }
-
-        &[rl] {
-          font-size: 110%;
-          color: var(--a-accent-1);
-        }
-        &[ch] {
-          font-size: 150%;
-          padding-bottom: 1rem;
-        }
-      }
-
-      img {
-        border-radius: 50%;
-      }
-    }
-  }
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-
-  tr:nth-child(even){
-    background:rgba(0, 0, 0, 0.253);
-  }
-
-  td {
-    padding: 0.75rem;
-    border:solid 1px black;
-
-    &[charname] {
-      font-size: 120%;
-    }
-  }
-  thead {
-    background: rgba(0, 0, 0, 0.562);
-    td{
-      border:0;
-      border-right:solid 1px black;
-    }
-  }
-}
-.reasons {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 1rem;
-
-  .reason{
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background:var(--a-dark-1);
-    border-radius: 1rem;
-    gap:.5rem;
-    padding:.5rem;
-
-    &[isKeyOwner=true]{
-      background:#e48015;
-    }
-
-    span{
-    font-size: 80%;
-  }
-  }
-
-
-
-  img {
-    border-radius: 50%;
-    height: 40px;
-  }
-}
-.player-lst{
-  display: flex;
-  flex-direction: column;
-
-  span{
-    &[ply]{
-      font-size:80%;
-    }
   }
 }
 </style>

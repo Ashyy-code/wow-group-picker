@@ -1,8 +1,11 @@
 <template>
+  <!--Keystone picker wrapper-->
   <div class="component-wrap">
+    <!--Component Title-->
   <div class="title">
     Keystone Level
   </div>
+  <!-- Main item control -->
   <div class="key-picker-wrapper" :style="'width:' + controlWidth">
     <i class="bx bx-chevron-down"></i>
     <div
@@ -14,6 +17,7 @@
       <span ph v-if="!selectedKey">-- Select --</span>
       <span selected class="option" v-if="selectedKey">{{ selectedKey }}</span>
     </div>
+    <!--The Dropdown menu-->
     <transition name="fade">
       <div v-if="showPicker" class="options-expanded">
         <div
@@ -67,11 +71,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/*Move these to APP css file for non-duplication - todo */
 .component-wrap{
   display:flex;
   flex-direction: column;
   gap:1rem;
 }
+/*Key picker specific styles */
 .key-picker-wrapper {
   position: relative;
 
@@ -107,6 +113,7 @@ export default {
     }
   }
 
+  /*Move to APP css for non duplication */
   .options-expanded {
     background: var(--a-dark-2);
     border-radius: 0.5rem;
@@ -124,6 +131,7 @@ export default {
     width:100%;
     z-index: 9999;
   }
+  /*Individual option css */
   .option {
     padding: 0.25rem 1rem;
     background: var(--a-dark-3);
