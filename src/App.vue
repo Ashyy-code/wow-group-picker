@@ -127,32 +127,7 @@
     <div class="output-desc">
       <h1>Suggested Group Formation:</h1>
       <div class="suggested-group-breakdown">
-        <div
-          v-for="player in groupCompData"
-          :key="player.player"
-          class="player"
-          :lust="player.is_lust"
-          :PI="player.is_PI"
-          :CR="player.is_CR"
-        >
-          <span v-if="player.is_lust == 1" tp lust="1"
-            ><img src="./assets/lust.jpg"
-          /></span>
-          <span v-if="player.is_CR == 1" tp CR="1"
-            ><img src="./assets/CR.jpg"
-          /></span>
-          <span v-if="player.is_PI == 1" tp PI="1"
-            ><img src="./assets/PI.jpg"
-          /></span>
-          <span
-            tp
-            v-if="player.is_lust == 0 && player.is_CR == 0 && player.is_PI == 0"
-            ><img src="./assets/none.jpg"
-          /></span>
-          <span rl>{{ player.role }}</span>
-          <img :src="player.icon" />
-          <span :style="'color:' + player.color" ch>{{ player.char }}</span>
-        </div>
+        <playerOutputCard v-for="player in groupCompData" :key="player.player" :player="player" />
       </div>
     </div>
     <h1>Reasoning:</h1>
@@ -170,7 +145,9 @@
               <td charname>
                 <div class="reasons">
                   <img :src="player.icon" />
-                  <span :style="'color:' + player.color">{{ player.char }}</span>
+                  <div class="player-lst">
+                  <span ply>{{ player.player }}</span>
+                  <span :style="'color:' + player.color">{{ player.char }}</span></div>
                 </div>
               </td>
               <td reasons>
@@ -178,6 +155,7 @@
                   <div class="reason"
                     v-for="reason in JSON.parse(player.reasoning)"
                     :key="reason.reason"
+                    :isKeyOwner="reason.reason == 'Keystone Owner'"
                   >
                     <span>{{ reason.reason }}</span>
                     <img :src="'src/assets/' + reason.reason_icon" />
@@ -201,6 +179,7 @@ import axios from "axios";
 //component refs
 import keyPicker from "./components/keyPicker.vue";
 import entryPicker from "./components/entryPicker.vue";
+import playerOutputCard from "./components/playerOutputCard.vue";
 
 //main app stuff here
 export default {
@@ -208,6 +187,7 @@ export default {
   components: {
     keyPicker,
     entryPicker,
+    playerOutputCard
   },
 
   //on initializaion of main app..
@@ -464,6 +444,7 @@ body {
     padding:0;
     overflow: hidden;
     outline: solid 5px var(--a-accent-4);
+    margin-bottom:3rem;
   }
 
   &[btn] {
@@ -494,8 +475,6 @@ body {
 
     &[rs] {
       display: block;
-      overflow-y: scroll;
-      max-height: 40vh;
     }
 
     button {
@@ -585,7 +564,7 @@ h1 {
     gap: 2rem;
 
     .player {
-      background: var(--a-dark-1);
+      background: #0c0c0cbd;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
@@ -671,6 +650,10 @@ table {
     gap:.5rem;
     padding:.5rem;
 
+    &[isKeyOwner=true]{
+      background:#e48015;
+    }
+
     span{
     font-size: 80%;
   }
@@ -681,6 +664,16 @@ table {
   img {
     border-radius: 50%;
     height: 40px;
+  }
+}
+.player-lst{
+  display: flex;
+  flex-direction: column;
+
+  span{
+    &[ply]{
+      font-size:80%;
+    }
   }
 }
 </style>
