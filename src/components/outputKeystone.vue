@@ -44,8 +44,8 @@
     <!--Key Item-->
     <div class="ky-item">
       <h3>Players</h3>
-      <span>{{ selectedPlayer2.name || "Any"  }}</span>
-      <span>{{ selectedPlayer3.name || "Any"  }}</span>
+      <span>{{ selectedPlayer2?.name || "Any"  }}</span>
+      <span>{{ selectedPlayer3?.name || "Any"  }}</span>
       <span>{{ selectedPlayer4?.name || "Any" }}</span>
       <span>{{ selectedPlayer5?.name || "Any"  }}</span>
     </div>

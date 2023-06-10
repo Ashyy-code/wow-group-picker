@@ -9,7 +9,6 @@
     <div v-if="this.$store.state.appLoaded">
       <h1>Ashy's Group Picker</h1>
       <div class="app-wrap">
-
         <!-- KEYSTONE SELECTION SECTION-->
         <div class="section">
           <h2><i class="bx bxs-key"></i>Keystone</h2>
@@ -39,7 +38,7 @@
               itemName="Affix"
               imageBind="affix_icon"
               pickerTitle="Affix 1"
-              @itemSelected="selectAffix"
+              @itemSelected="selectAffix1"
               ref="affixpicker1"
             />
             <entryPicker
@@ -48,7 +47,7 @@
               itemName="Affix"
               imageBind="affix_icon"
               pickerTitle="Affix 2"
-              @itemSelected="selectAffix"
+              @itemSelected="selectAffix2"
               ref="affixpicker2"
             />
             <entryPicker
@@ -57,7 +56,7 @@
               itemName="Affix"
               imageBind="affix_icon"
               pickerTitle="Affix 3"
-              @itemSelected="selectAffix"
+              @itemSelected="selectAffix3"
               ref="affixpicker3"
             />
           </div>
@@ -83,7 +82,7 @@
               itemName="Player"
               imageBind="img"
               pickerTitle="Player 2"
-              @itemSelected="selectPlayer"
+              @itemSelected="selectPlayer2"
               controlWidth="200px"
             />
             <entryPicker
@@ -92,7 +91,7 @@
               itemName="Player"
               imageBind="img"
               pickerTitle="Player 3"
-              @itemSelected="selectPlayer"
+              @itemSelected="selectPlayer3"
               controlWidth="200px"
             />
             <entryPicker
@@ -101,7 +100,7 @@
               itemName="Player"
               imageBind="img"
               pickerTitle="Player 4"
-              @itemSelected="selectPlayer"
+              @itemSelected="selectPlayer4"
               controlWidth="200px"
             />
             <entryPicker
@@ -110,24 +109,25 @@
               itemName="Player"
               imageBind="img"
               pickerTitle="Player 5"
-              @itemSelected="selectPlayer"
+              @itemSelected="selectPlayer5"
               controlWidth="200px"
             />
           </div>
         </div>
         <!--END PLAYER SELECTION SECTION-->
 
-
+        {{ selectedPlayer1 }}
+      
         <!--GO BUTTON SECTION-->
         <div class="section" btn>
           <div class="section-wrapper" btn>
-            <button>Big button to click and make things go</button>
+            <button @click="getGroup()">
+              Big button to click and make things go
+            </button>
             <img src="./assets/pandussy.png" />
           </div>
         </div>
         <!--END GO BUTTON SECTION-->
-
-
       </div>
     </div>
   </div>
@@ -137,17 +137,16 @@
   <div class="app-wrap" v-if="groupCompData">
     <!--Lots of test data on the outputkeystone component, ignore-->
     <outputKeystoneVue
-      :selectedAffix1="$store.state.affixList[8]"
-      :selectedAffix2="$store.state.affixList[2]"
-      :selectedAffix3="$store.state.affixList[7]"
-      :selectedDungeon="$store.state.dungeonList[62]"
-      selectedKeyStoneLevel='+17'
-      :selectedPlayer1="$store.state.playerChars[0]"
-      :selectedPlayer2="$store.state.playerList[1]"
-      :selectedPlayer3="$store.state.playerList[5]"
-      :selectedPlayer4="null"
-      :selectedPlayer5="null"
-      
+      :selectedAffix1="selectedAffix1"
+      :selectedAffix2="selectedAffix2"
+      :selectedAffix3="selectedAffix3"
+      :selectedDungeon="selectedDungeon"
+      :selectedKeyStoneLevel="selectedKeyStoneLevel"
+      :selectedPlayer1="selectedPlayer1"
+      :selectedPlayer2="selectedPlayer2"
+      :selectedPlayer3="selectedPlayer3"
+      :selectedPlayer4="selectedPlayer4"
+      :selectedPlayer5="selectedPlayer5"
     />
     <outputBreakdownVue :groupCompData="groupCompData" />
     <reasoningBreakdown :groupCompData="groupCompData" />
@@ -165,7 +164,7 @@ import keyPicker from "./components/keyPicker.vue";
 import entryPicker from "./components/entryPicker.vue";
 import reasoningBreakdown from "./components/reasoningBreakdown.vue";
 import outputBreakdownVue from "./components/outputBreakdown.vue";
-import outputKeystoneVue from './components/outputKeystone.vue';
+import outputKeystoneVue from "./components/outputKeystone.vue";
 
 //main app stuff here
 export default {
@@ -175,7 +174,7 @@ export default {
     entryPicker,
     reasoningBreakdown,
     outputBreakdownVue,
-    outputKeystoneVue
+    outputKeystoneVue,
   },
 
   //on initializaion of main app..
@@ -233,17 +232,18 @@ export default {
     ]).then((res) => {
       this.$store.state.appLoaded = true;
       setTimeout(() => {
+        //set the current affixes
         this.setInitialAffixes();
 
-        //testing methods
-        this.getGroup().then((res) => console.log(this.groupCompData));
+        // //testing methods
+        // this.getGroup().then((res) => console.log(this.groupCompData));
       }, 200);
       console.log(
         this.$store.state.playerChars,
         this.$store.state.dungeonList,
         this.$store.state.affixList,
-        this.$store.state.specList
-        ,this.$store.state.playerList
+        this.$store.state.specList,
+        this.$store.state.playerList
       );
     });
   },
@@ -301,22 +301,26 @@ export default {
 
     //Submit the group to the API
     async getGroup() {
+      //set the loading state
+      this.$store.state.appLoaded = false;
       await axios
         .post(this.$store.state.webServiceURL + "computedGroup", {
           //apply the parameters
           contentType: "application/json",
-          dungeonName: this.selectedDungeon,
+          dungeonName: this.selectedDungeon.dungeon_name,
           keystoneLevel: this.selectedKeyStoneLevel,
-          affix_1_id: this.selectedAffix1,
-          affix_2_id: this.selectedAffix2,
-          affix_3_id: this.selectedAffix3,
-          player_1_name: this.selectedPlayer1,
+          affix_1: this.selectedAffix1.affix_name,
+          affix_2: this.selectedAffix2.affix_name,
+          affix_3: this.selectedAffix3.affix_name,
+          player_1_name: this.selectedPlayer1.charName,
           player_2_name: this.selectedPlayer2,
           player_3_name: this.selectedPlayer3,
           player_4_name: this.selectedPlayer4,
           player_5_name: this.selectedPlayer5,
         })
         .then((res) => {
+          //set loaded
+          this.$store.state.appLoaded = true;
           //setup the return response
           let response = JSON.parse(res.data.d);
           let response_status = response.status;
@@ -347,12 +351,36 @@ export default {
     //Player selector component fires the selctedPlayer event
     selectPlayer(charname) {
       //set the selected key
-      this.selectedKeyOwner = charname;
+      this.selectedPlayer1 = charname;
+    },
+    selectPlayer2(charname) {
+      //set the selected key
+      this.selectedPlayer2 = charname;
+    },
+    selectPlayer3(charname) {
+      //set the selected key
+      this.selectedPlayer3 = charname;
+    },
+    selectPlayer4(charname) {
+      //set the selected key
+      this.selectedPlayer4 = charname;
+    },
+    selectPlayer5(charname) {
+      //set the selected key
+      this.selectedPlayer5 = charname;
     },
     //Affix selector component fires the selected Affix event
-    selectAffix(affix) {
+    selectAffix1(affix) {
       //set the selected key
       this.selectedAffix1 = affix;
+    },
+    selectAffix2(affix) {
+      //set the selected key
+      this.selectedAffix2 = affix;
+    },
+    selectAffix3(affix) {
+      //set the selected key
+      this.selectedAffix3 = affix;
     },
     //set the initial affixes
     setInitialAffixes() {
@@ -406,7 +434,7 @@ export default {
   --a-accent-3: #686868;
   --a-accent-4: #ecdb6f;
 
-  --a-accent-1-ts:#ecdb6f8b;
+  --a-accent-1-ts: #ecdb6f8b;
   --a-dark-1-ts: #0c0c0cab;
 }
 /*Body and APP main generics */
