@@ -140,7 +140,7 @@
       :selectedAffix1="$store.state.affixList[8]"
       :selectedAffix2="$store.state.affixList[2]"
       :selectedAffix3="$store.state.affixList[7]"
-      :selectedDungeon="$store.state.dungeonList[19]"
+      :selectedDungeon="$store.state.dungeonList[62]"
       selectedKeyStoneLevel='+17'
       :selectedPlayer1="$store.state.playerChars[0]"
       :selectedPlayer2="$store.state.playerList[1]"
@@ -405,6 +405,9 @@ export default {
   --a-accent-2: #837a3e;
   --a-accent-3: #686868;
   --a-accent-4: #ecdb6f;
+
+  --a-accent-1-ts:#ecdb6f8b;
+  --a-dark-1-ts: #0c0c0cab;
 }
 /*Body and APP main generics */
 body {
