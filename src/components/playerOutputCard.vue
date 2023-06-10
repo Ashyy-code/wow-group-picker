@@ -5,6 +5,7 @@
     :lust="player.is_lust"
     :PI="player.is_PI"
     :CR="player.is_CR"
+    :style="'background-image:url(' + card + ');'"
   >
     <!--Lust-->
     <span v-if="player.is_lust == 1" tp lust="1"
@@ -34,7 +35,7 @@
 <script>
 export default {
   //take the player from the prop
-  props: ["player"],
+  props: ["player", "card"],
 };
 </script>
 
@@ -42,6 +43,8 @@ export default {
 .player {
   /*Main player card class*/
   background: var(--a-dark-3);
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

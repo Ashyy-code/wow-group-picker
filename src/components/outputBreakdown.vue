@@ -7,6 +7,7 @@
           v-for="player in groupCompData"
           :key="player.player"
           :player="player"
+          :card="player.role_card"
         />
       </div>
     </div>
