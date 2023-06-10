@@ -32,7 +32,7 @@
                     :isKeyOwner="reason.reason == 'Keystone Owner'"
                   >
                     <span>{{ reason.reason }}</span>
-                    <img :src="'src/assets/' + reason.reason_icon" />
+                    <img :src="reason.reason_icon" />
                   </div>
                 </div>
               </td>

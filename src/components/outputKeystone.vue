@@ -91,7 +91,7 @@ export default {
     display: flex;
     flex-direction: column;
     gap: .5rem;
-    outline: solid 5px var(--a-accent-1-ts);
+    outline: solid 5px var(--a-dark-1);
     min-width:120px;
     justify-content: space-between;
     align-items: center;

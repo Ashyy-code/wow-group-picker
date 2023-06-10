@@ -114,10 +114,7 @@
             />
           </div>
         </div>
-        <!--END PLAYER SELECTION SECTION-->
-
-        {{ selectedPlayer1 }}
-      
+        <!--END PLAYER SELECTION SECTION-->      
         <!--GO BUTTON SECTION-->
         <div class="section" btn>
           <div class="section-wrapper" btn>
@@ -238,13 +235,13 @@ export default {
         // //testing methods
         // this.getGroup().then((res) => console.log(this.groupCompData));
       }, 200);
-      console.log(
-        this.$store.state.playerChars,
-        this.$store.state.dungeonList,
-        this.$store.state.affixList,
-        this.$store.state.specList,
-        this.$store.state.playerList
-      );
+      // console.log(
+      //   this.$store.state.playerChars,
+      //   this.$store.state.dungeonList,
+      //   this.$store.state.affixList,
+      //   this.$store.state.specList,
+      //   this.$store.state.playerList
+      // );
     });
   },
 
@@ -313,10 +310,10 @@ export default {
           affix_2: this.selectedAffix2.affix_name,
           affix_3: this.selectedAffix3.affix_name,
           player_1_name: this.selectedPlayer1.charName,
-          player_2_name: this.selectedPlayer2,
-          player_3_name: this.selectedPlayer3,
-          player_4_name: this.selectedPlayer4,
-          player_5_name: this.selectedPlayer5,
+          player_2_name: this.selectedPlayer2?.name || "n/a",
+          player_3_name: this.selectedPlayer3?.name || "n/a",
+          player_4_name: this.selectedPlayer4?.name || "n/a",
+          player_5_name: this.selectedPlayer5?.name || "n/a",
         })
         .then((res) => {
           //set loaded
@@ -334,6 +331,9 @@ export default {
           if (response_status == "fail") {
             this.apiError = response.message;
           }
+        }).catch(err =>{
+          this.apiError = err.message;
+          this.$store.state.appLoaded = true;
         });
     },
 
@@ -464,7 +464,7 @@ body {
   &[rs] {
     padding: 0;
     overflow: hidden;
-    outline: solid 5px var(--a-accent-4);
+    outline: solid 5px var(--a-dark-1);
     margin-bottom: 3rem;
   }
 
