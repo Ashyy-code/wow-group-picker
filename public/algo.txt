@@ -1,0 +1,16 @@
+ALGORYTHM EXPLAINED
+
+1.Generate score requirement based on selected options.
+
+2. Sort all players chars/specs into a table
+3. Assign each spec/char a score based on its suitability to the requirement
+4. Sort the table by score ascending, most viable at the top.
+5. Itterate over the table until the keystone owner character is found.
+6. Check role / ilevel / score requirements and skip to next if needed.
+7. Select this player into the role. 
+6. Recalculate the score requirement and repeat step2.
+7. Repeat for each additional selected player. 
+8. If non-selected players are required, Recalculate score requirement and sort the table again, filtering out all chars
+belonging to an already selected player.
+9. Once the table is filtered and sorted, take the top rating char / spec of all remaining non-picked players for as many
+additional players as needed. Select these players into the roles. 

@@ -121,7 +121,6 @@
             <button @click="getGroup()">
               Big button to click and make things go
             </button>
-            <img src="./assets/pandussy.png" />
           </div>
         </div>
         <!--END GO BUTTON SECTION-->

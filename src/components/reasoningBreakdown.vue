@@ -35,6 +35,15 @@
                     <img :src="reason.reason_icon" />
                   </div>
                 </div>
+                <div class="reasons-depth">
+                  <table>
+                    <tr v-for="reason in JSON.parse(player.reasoning)" :key="reason.reason">
+                    <td rsn>
+                      {{ reason.reason_desc }}
+                    </td>
+                    </tr>
+                  </table>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -67,6 +76,12 @@ table {
     &[charname] {
       font-size: 120%;
     }
+    &[reasons]{
+      padding:0;
+    }
+    &[rsn]{
+      padding:.25rem;
+    }
   }
   thead {
     background: rgba(0, 0, 0, 0.562);
@@ -94,6 +109,7 @@ table {
     border-radius: 1rem;
     gap: 0.5rem;
     padding: 0.5rem;
+    margin:.5rem;
 
     &[isKeyOwner="true"] {
       background: #e48015;
@@ -109,6 +125,8 @@ table {
     border-radius: 50%;
     height: 40px;
   }
+
+
 }
 /*player lst is not a list of players, its just a container that lets the name and class sit on top of each other */
 .player-lst {
@@ -122,4 +140,6 @@ table {
     }
   }
 }
+
+
 </style>
